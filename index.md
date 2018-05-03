@@ -1,6 +1,7 @@
-# 电视安全Sdk接入文档
+# 电视安全Sdk接入文档 
 
-##集成
+
+## 集成
 ```javascript { .theme-peacock }
 repositories {
     flatDir {
@@ -17,7 +18,7 @@ dependencies {
 }
 ```
 
-##混淆配置
+## 混淆配置
 ```javascript { .theme-peacock }
 ##---------------Begin: proguard configuration for Gson  ----------
 # Gson uses generic type information stored in a class file when working with fields. Proguard
@@ -41,9 +42,10 @@ dependencies {
 ```
 
 
-##使用
+## 使用
 
-###初始化与配置
+### 初始化与配置
+
 ```javascript { .theme-peacock }
 @Override
     public void onCreate() {
@@ -67,7 +69,7 @@ dependencies {
 
 
 
-###调用方法。
+### 调用方法。
 这些方法都是静态的，你可以直接访问它们。如果接口返回失败，多数情况下是还没有加载好模块，稍等一会再尝试调用。
 ```javascript { .theme-peacock }
 public class TVSafe {
@@ -150,7 +152,7 @@ public class TVSafe {
 ```
 
 
-###回调
+### 回调
 需要自己建立一个service，继承自`AbstractResultService `。
 ```javascript { .theme-peacock }
 public class MyResultService extends AbstractResultService {
@@ -190,8 +192,8 @@ public class MyResultService extends AbstractResultService {
 }
 ```
 
-##实验结果
-###onAvpScanResult
+## 实验结果
+### onAvpScanResult
 ```javascript { .theme-peacock }
 public class AvpScanResult implements Serializable {
     /**
@@ -282,7 +284,7 @@ public class AvpThreatInfo implements Serializable {
 
 ```
 
-###onVulnScanResult
+### onVulnScanResult
 ```javascript { .theme-peacock }
 public class VulnInfo implements Serializable {
     /**
@@ -355,7 +357,7 @@ public class VulnInfo implements Serializable {
 ```
 
 
-###onNedScanResult
+### onNedScanResult
 ```javascript { .theme-peacock }
 public class NedResult implements Serializable {
     /**
@@ -397,12 +399,12 @@ public class NedResult implements Serializable {
 04-04 10:31:02.481 14352-15027/com.baidu.roosdkdemo I/onNedScanResult: {"state":{"checktime":0,"code":128},"datas":{"isNotFakeWifi":false,"isWifiArpSafe":false,"isWifiEncryption":false,"isNetOnline":false,"isNotFakeDNS":false,"isWifiSSLSafe":false}}
 ```
 
-###onDnsFixed
+### onDnsFixed
 ```html
 04-08 13:52:58.848 19851-20155/? I/onDnsFixed: true
 ```
 
-###onGetIpResult
+### onGetIpResult
 ```javascript { .theme-peacock }
 public class DnsResult implements Serializable {
     /**
@@ -429,7 +431,7 @@ public class DnsResult implements Serializable {
 04-10 11:12:31.018 1251-1781/com.baidu.roosdkdemo I/onGetIpResult: code : 1,err : 解析域名成功,ip : 119.75.213.61,ip : 119.75.216.20
 ```
 
-###onGetUrlInfoResult
+### onGetUrlInfoResult
 ```javascript { .theme-peacock }
 public class SafeUrlInfo implements Serializable {
     /**
@@ -458,17 +460,17 @@ public class SafeUrlInfo implements Serializable {
 
 
 
-#dns修复
+# dns修复
 这个模块比较特殊，有个限制条件，必须在root权限下执行。
 因此给出两种起调方案。
-##直接以接口形式
+## 直接以接口形式
 如果集成了roosdk的宿主，可以获得root权限，直接调用`RooSdk.fixDns(getApplicationContext());`，此方法在内部会执行`su -c ./xxxxx`
-##可执行文件
+## 可执行文件
 如果集成了roosdk的宿主没法获取root权限，可以把这两个可执行文件(xdns、xdnsproxy，在sdk的assets文件夹里，解压它就可以了)单独拿出来，在适当需要修复dns的时候，比如onNedScanResult回调dns异常时。需要做两件工作。
 
 *	把xdns 与 xdnsproxy放同一目录，给他们两个都chmod 上可执行权限
 *	执行xdns，参数加上回调的service，比如：`./xdns -p com.baidu.roosdkdemo -c com.baidu.roosdkdemo.MyResultService`
 	*	-p : 包名
 	*	-c : 服务的类名
-##最后
+## 最后
 选择后者（以可执行文件集成）的话，我们会给到一个不含那两个文件的sdk，这样可以缩小sdk的体积，两个可执行文件可以单独给到。具体方案上的选择可以再沟通。
