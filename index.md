@@ -2,7 +2,7 @@
 
 
 ## 集成
-```javascript { .theme-peacock }
+```
 repositories {
     flatDir {
         dirs 'libs'
@@ -19,7 +19,7 @@ dependencies {
 ```
 
 ## 混淆配置
-```javascript { .theme-peacock }
+```
 ##---------------Begin: proguard configuration for Gson  ----------
 # Gson uses generic type information stored in a class file when working with fields. Proguard
 # removes such information by default, so configure it to keep all of it.
@@ -46,7 +46,7 @@ dependencies {
 
 ### 初始化与配置
 
-```javascript { .theme-peacock }
+```
 @Override
     public void onCreate() {
         super.onCreate();
@@ -71,7 +71,7 @@ dependencies {
 
 ### 调用方法。
 这些方法都是静态的，你可以直接访问它们。如果接口返回失败，多数情况下是还没有加载好模块，稍等一会再尝试调用。
-```javascript { .theme-peacock }
+```
 public class TVSafe {
     /**
      * 启动漏洞扫描（有界面）
@@ -154,7 +154,7 @@ public class TVSafe {
 
 ### 回调
 需要自己建立一个service，继承自`AbstractResultService `。
-```javascript { .theme-peacock }
+```
 public class MyResultService extends AbstractResultService {
     @Override
     public void onAvpScanResult(List<AvpScanResult> list) {
@@ -194,7 +194,7 @@ public class MyResultService extends AbstractResultService {
 
 ## 实验结果
 ### onAvpScanResult
-```javascript { .theme-peacock }
+```
 public class AvpScanResult implements Serializable {
     /**
      * 病毒级别
@@ -285,7 +285,7 @@ public class AvpThreatInfo implements Serializable {
 ```
 
 ### onVulnScanResult
-```javascript { .theme-peacock }
+```
 public class VulnInfo implements Serializable {
     /**
      * 风险等级
@@ -358,7 +358,7 @@ public class VulnInfo implements Serializable {
 
 
 ### onNedScanResult
-```javascript { .theme-peacock }
+```
 public class NedResult implements Serializable {
     /**
      * true : 网络在线
@@ -405,7 +405,7 @@ public class NedResult implements Serializable {
 ```
 
 ### onGetIpResult
-```javascript { .theme-peacock }
+```
 public class DnsResult implements Serializable {
     /**
      * 返回代码
@@ -432,7 +432,7 @@ public class DnsResult implements Serializable {
 ```
 
 ### onGetUrlInfoResult
-```javascript { .theme-peacock }
+```
 public class SafeUrlInfo implements Serializable {
     /**
      * url
