@@ -20,6 +20,134 @@ SDK for Framework：
 一个jar包：safehttp.jar
 
 ## 集成方法
-### 集成到APP当中
-#### 1 添加aar文件到APP工程
-将mesalink-release.aar拷贝到需要引入的module的libs目录下
+### 1 集成到APP当中
+#### 1.1 添加aar文件到APP工程
+将safehttp-release.aar拷贝到需要引入的module的libs目录下
+
+#### 1.2 添加依赖
+```
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    compile(name: 'safehttp-release', ext: 'aar')
+}
+```
+
+#### 1.3 混淆
+```
+-keep class com.baidu.safehttp.** { *; }
+```
+
+#### 1.4 使用
+```
+Application：
+@Override
+public void onCreate() {
+    super.onCreate();
+    SafeHttp.init(this);
+}
+```
+
+### 2 集成到Android Framework当中
+#### 2.1 添加so文件到系统工程
+在源码目录中找到external/conscrypt文件夹，在其中新建目录jniLibs，将对应abi的libmesalink-jni.so拷贝到其中对应的子目录当中
+#### 2.2 添加jar包到系统
+在源码目录中找到external/conscrypt文件夹，在其中新建目录libs，将safehttp.jar拷贝到其中
+#### 2.3 修改编译脚本
+在源码目录中找到external/conscrypt文件夹，修改其中的Android.mk文件：
+```
+core_cflags := -Wall -Wextra -Werror
+core_cppflags := -std=gnu++11
+
+# add these lines
+include $(CLEAR_VARS)
+LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES := safehttp:libs/safehttp.jar
+LOCAL_PREBUILT_LIBS := libmesalink-jni:jniLibs/armeabi/libmesalink-jni.so
+LOCAL_MODULE_TAGS := optional
+include $(BUILD_MULTI_PREBUILT)
+# add end
+
+# Build for the target (device).
+#
+
+# Create the conscrypt library
+include $(CLEAR_VARS)
+LOCAL_SRC_FILES := $(call all-java-files-under,src/main/java)
+LOCAL_SRC_FILES += $(call all-java-files-under,src/platform/java)
+LOCAL_JAVA_LIBRARIES := core-libart
+# add this line
+LOCAL_STATIC_JAVA_LIBRARIES := safehttp
+# add end
+LOCAL_NO_STANDARD_LIBRARIES := true
+LOCAL_JAVACFLAGS := $(local_javac_flags)
+LOCAL_JARJAR_RULES := $(LOCAL_PATH)/jarjar-rules.txt
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE := conscrypt
+LOCAL_REQUIRED_MODULES := libjavacrypto
+LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
+include $(BUILD_JAVA_LIBRARY)
+```
+
+#### 2.4 修改配置文件
+修改文件libcore/luni/src/main/java/java/security/security.properties
+```
+#
+# Providers
+# See also: J2SE doc. "How to Implement a Provider for the JavaTM Cryptography Architecture"
+#
+# Android's provider of OpenSSL backed implementations
+# modify these lines
+security.provider.1=com.baidu.safehttp.mesalink.jsse.MesaLinkSSLProvider
+security.provider.2=com.android.org.conscrypt.OpenSSLProvider
+# Android's stripped down BouncyCastle provider
+security.provider.3=com.android.org.bouncycastle.jce.provider.BouncyCastleProvider
+# Remaining Harmony providers
+security.provider.4=org.apache.harmony.security.provider.crypto.CryptoProvider
+security.provider.5=com.android.org.conscrypt.JSSEProvider
+# modify end
+
+
+# The default SSLSocketFactory and SSLServerSocketFactory provider implementations.
+# See specification for 
+# javax/net/ssl/SSLSocketFactory.html#getDefault()
+# javax/net/ssl/SSLServerSocketFactory.html#getDefault()
+
+# For regular SSLSockets, we have two implementations:
+# modify this line
+ssl.SocketFactory.provider=com.baidu.safehttp.mesalink.jsse.MesaLinkSSLSocketFactoryImpl
+#ssl.SocketFactory.provider=com.android.org.conscrypt.SSLSocketFactoryImpl
+```
+
+#### 2.5 修改类文件
+libcore/luni/src/main/java/java/security/Security.java
+```
+// modify this method
+// Register default providers
+private static void registerDefaultProviders() {
+    secprops.put("security.provider.1", "com.baidu.safehttp.mesalink.jsse.MesaLinkSSLProvider");
+    secprops.put("security.provider.2", "com.android.org.conscrypt.OpenSSLProvider");
+    secprops.put("security.provider.3", "com.android.org.bouncycastle.jce.provider.BouncyCastleProvider");
+    secprops.put("security.provider.4", "org.apache.harmony.security.provider.crypto.CryptoProvider");
+    secprops.put("security.provider.5", "com.android.org.conscrypt.JSSEProvider");
+}
+```
+
+#### 2.6 添加入口（仅在集成DNS for HTTP时需要）
+修改类文件frameworks/base/core/java/android/app/Application.java
+```
+// add import
+import com.baidu.safehttp.SafeHttp;
+
+// modify this method
+public void onCreate() {
+    SafeHttp.init(this);
+}
+```
+
+#### 2.7 编译
+编译成功之后请检查out/target/product/generic/system/lib文件夹下有没有SDK的so库
+如果没有，单独编译一遍conscrypt模块，然后make snod即可
