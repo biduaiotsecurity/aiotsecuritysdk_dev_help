@@ -14,13 +14,19 @@ PS：目前还不能解决Native库和WebView的SSL安全。
 
 ## SDK文件内容
 不同接入方式的SDK文件内容稍有不同
+
 SDK for APP：
+
 总共一个文件
+
 safehttp-release.aar
 
 SDK for Framework：
+
 总共两个文件
+
 一个so库：libmesalink-jni.so
+
 一个jar包：safehttp.jar
 
 ## 集成方法
