@@ -35,9 +35,6 @@ allow init_shell self:udp_socket setopt;
 allow init_shell self:udp_socket bind;
 allow init_shell port:udp_socket name_bind;
 allow init_shell node:udp_socket node_bind;
-allow init_shell port:tcp_socket name_connect;
-allow init_shell self:tcp_socket { write create connect };
-allow init_shell self:tcp_socket read;
 ```
 
 步骤四：打开android源码目录下的/exrernal/sepolicy/system_app.te，在文件末尾加入如下内容：
