@@ -27,17 +27,7 @@ service exxdnsproxy /system/bin/sh /system/bin/exxdnsproxy.sh
 /system/bin/xdnsproxy u:object_r:xdnsproxy_exec:s0
 ```
 
-步骤三：打开android源码目录下的/exrernal/sepolicy/init_shell.te，在文件末尾加入如下内容：
-```
-allow init_shell self:udp_socket create;
-allow init_shell self:udp_socket ioctl;
-allow init_shell self:udp_socket setopt;
-allow init_shell self:udp_socket bind;
-allow init_shell port:udp_socket name_bind;
-allow init_shell node:udp_socket node_bind;
-```
-
-步骤四：打开android源码目录下的/exrernal/sepolicy/system_app.te，在文件末尾加入如下内容：
+步骤三：打开android源码目录下的/exrernal/sepolicy/system_app.te，在文件末尾加入如下内容：
 ```
 allow system_app ctl_default_prop:property_service{set};
 ```
