@@ -1,4 +1,4 @@
-# xdnsproxy接入文档
+# xdns接入文档
 
 ## 集成方法
 ### 1 添加执行脚本exxdnsproxy.sh与xdnsproxy到/system/bin/目录
