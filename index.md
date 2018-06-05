@@ -142,6 +142,16 @@ public class TVSafe {
     public static boolean fixDns()
 
     /**
+     * 停止dns修复
+     * */
+     public static void stopDns()
+     
+     /**
+     * 查看dns修复状态
+     * */
+     public static void checkDnsStatus()
+
+    /**
      * 通过url获取ip
      */
     public static boolean getIPsUrlByDomainUrl(String url)
@@ -178,8 +188,8 @@ public class MyResultService extends AbstractResultService {
     }
 
     @Override
-    public void onDnsFixed(boolean suc) {
-        Log.i("onDnsFixed", suc ? "true" : "false");
+    public void onDnsFixed(String behaviour, boolean suc)
+        Log.i("onDnsFixed", behaviour + " " + (suc ? "true" : "false"));
     }
 
     @Override
@@ -403,7 +413,21 @@ public class NedResult implements Serializable {
 
 ### onDnsFixed
 ```html
-04-08 13:52:58.848 19851-20155/? I/onDnsFixed: true
+/**
+* 启动修复dns成功
+*/
+06-05 11:00:58.848 19851-20155/? I/onDnsFixed: start_behaviour true
+
+/**
+* 停止修复dns成功
+*/
+06-05 11:01:47.848 19851-20155/? I/onDnsFixed: stop_behaviour true
+
+/**
+* 查询修复dns状态为启动
+*/
+06-05 11:01:25.848 19851-20155/? I/onDnsFixed: check_behaviour true
+
 ```
 
 ### onGetIpResult
@@ -459,8 +483,6 @@ public class SafeUrlInfo implements Serializable {
 ```html
 04-10 10:53:25.678 31600-382/? I/onGetUrlInfoResult: url : www.baidu.com,safeLevel : 2,desc : null
 ```
-
-
 
 # dns修复
 这个模块比较特殊，有个限制条件，必须在root权限下执行。
