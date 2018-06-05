@@ -11,7 +11,17 @@
 ### 2 编写启动服务
 打开/system/core/rootdir/init.rc文件，在文件末尾加入如下内容：
 ```
-service exxdnsproxy /system/bin/sh /system/bin/exxdnsproxy.sh
+service startxdns /system/bin/sh /system/bin/exxdnsproxy.sh com.baidu.roosdkdemo .MyResultService start
+    class core
+    disabled
+    oneshot
+    
+ service stopxdns /system/bin/sh /system/bin/exxdnsproxy.sh com.baidu.roosdkdemo .MyResultService stop
+    class core
+    disabled
+    oneshot
+
+ service checkxdns /system/bin/sh /system/bin/exxdnsproxy.sh com.baidu.roosdkdemo .MyResultService check
     class core
     disabled
     oneshot
