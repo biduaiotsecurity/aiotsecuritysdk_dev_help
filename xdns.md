@@ -6,6 +6,7 @@
 
 <div align=center>xdns技术实现原理图</div>
 
+
 首先，通过Demo APP反射调用android.os.SystemProperties发送启动命令到init进程；
 
 其次，init进程通过对启动命令分析init.rc存在的service进而通过shell脚本启动xdns；
@@ -18,7 +19,7 @@
 
 步骤二：将Android.mk、exxdnshproxy.sh、xdns以及xdnsproxy放到此目录system/core/rootdir/xdns/下；
 
-步骤三：在system/core/rootdir/xdns/目录下，输入指令:"mm"。
+步骤三：在system/core/rootdir/xdns/目录下，输入指令:"mm"进行模块编译，然后将此模块编译进入system.img中。
 
 ### 2 编写启动服务
 打开/system/core/rootdir/init.rc文件，在文件末尾加入如下内容：
