@@ -1,5 +1,7 @@
 # xdns接入文档
 
+## 技术实现原理
+
 ## 集成方法
 ### 1 添加执行脚本exxdnsproxy.sh、xdns以及xdnsproxy到/system/bin/目录
 步骤一：在android源码目录下的/system/core/rootdir/下新建xdns目录；
@@ -44,18 +46,4 @@ service startxdns /system/bin/sh /system/bin/exxdnsproxy.sh com.baidu.roosdkdemo
 allow system_app ctl_default_prop:property_service{set};
 ```
 
-### 4 app启动服务
-反射调用方法：
-```
-public void startXdns() {
-    try {
-        Class<?> c = Class.forName("android.os.SystemProperties");
-        Method set = c.getMethod("set", String.class, String.class);
-        set.invoke(c, "ctl.start", "exxdnsproxy");
-    } catch (Execetion e) {
-        e.printStackTrace();
-    }
-}
-```
-备注：此app必须为system app。
 
