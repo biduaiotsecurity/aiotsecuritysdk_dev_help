@@ -1,7 +1,7 @@
 # xdns接入文档
 
 ## 技术实现原理
-<div align=center>![xdns技术原理图](https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/image/xdns%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86.png)</div>
+<div align=center><img width="150" height="150" src="https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/image/xdns%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86.png"/></div>
 ## 集成方法
 ### 1 添加执行脚本exxdnsproxy.sh、xdns以及xdnsproxy到/system/bin/目录
 步骤一：在android源码目录下的/system/core/rootdir/下新建xdns目录；
