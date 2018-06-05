@@ -3,6 +3,10 @@
 ## 技术实现原理
 <div align=center><img src="https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/image/xdns%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86.png"/></div>
 
+首先，通过Demo APP反射调用android.os.SystemProperties发送启动命令到init进程；
+其次，init进程通过对启动命令分析init.rc存在的service进而通过shell脚本启动xdns；
+最后，由xdns通过对shell脚本参数的设置进行开启、关闭以及查询xdnsproxy状态。
+
 ## 集成方法
 ### 1 添加执行脚本exxdnsproxy.sh、xdns以及xdnsproxy到/system/bin/目录
 步骤一：在android源码目录下的/system/core/rootdir/下新建xdns目录；
