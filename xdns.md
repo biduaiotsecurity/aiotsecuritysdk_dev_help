@@ -8,7 +8,7 @@
 
 其次，init进程通过对启动命令分析init.rc存在的service进而通过shell脚本启动xdns；
 
-最后，由xdns通过对shell脚本参数的设置进行开启、关闭以及查询xdnsproxy状态。
+最后，由xdns通过对shell脚本参数分析进行开启、关闭以及查询xdnsproxy状态。
 
 ## 集成方法
 ### 1 添加执行脚本exxdnsproxy.sh、xdns以及xdnsproxy到/system/bin/目录
