@@ -13,6 +13,8 @@
 
 最后，由xdns通过对shell脚本参数分析进行开启、关闭以及查询xdnsproxy状态。
 
+备注：Demo APP必须为system app。
+
 ## 集成方法
 ### 1 添加执行脚本exxdnsproxy.sh、xdns以及xdnsproxy到/system/bin/目录
 步骤一：在android源码目录下的/system/core/rootdir/下新建xdns目录；
