@@ -56,5 +56,7 @@ service startxdns /system/bin/sh /system/bin/exxdnsproxy.sh com.baidu.rootv com.
 ```
 allow system_app ctl_default_prop:property_service{set};
 ```
+步骤四：在/exrernal/sepolicy/目录下，输入指令:"mm"进行模块编译，然后将此模块编译进入system.img中。
 
-
+### 4 如何启动、关闭以及查询xdns
+请查阅链接中的调用方法：https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/index.md
