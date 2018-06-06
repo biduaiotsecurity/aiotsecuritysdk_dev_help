@@ -144,12 +144,12 @@ public class TVSafe {
     /**
      * 停止dns修复
      * */
-     public static void stopDns()
+     public static boolean stopDns()
      
      /**
      * 查看dns修复状态
      * */
-     public static void checkDnsStatus()
+     public static boolean checkDnsStatus()
 
     /**
      * 通过url获取ip
@@ -483,18 +483,3 @@ public class SafeUrlInfo implements Serializable {
 ```html
 04-10 10:53:25.678 31600-382/? I/onGetUrlInfoResult: url : www.baidu.com,safeLevel : 2,desc : null
 ```
-
-# dns修复
-这个模块比较特殊，有个限制条件，必须在root权限下执行。
-因此给出两种起调方案。
-## 直接以接口形式
-如果集成了roosdk的宿主，可以获得root权限，直接调用`RooSdk.fixDns(getApplicationContext());`，此方法在内部会执行`su -c ./xxxxx`
-## 可执行文件
-如果集成了roosdk的宿主没法获取root权限，可以把这两个可执行文件(xdns、xdnsproxy，在sdk的assets文件夹里，解压它就可以了)单独拿出来，在适当需要修复dns的时候，比如onNedScanResult回调dns异常时。需要做两件工作。
-
-*	把xdns 与 xdnsproxy放同一目录，给他们两个都chmod 上可执行权限
-*	执行xdns，参数加上回调的service，比如：`./xdns -p com.baidu.roosdkdemo -c com.baidu.roosdkdemo.MyResultService`
-	*	-p : 包名
-	*	-c : 服务的类名
-## 最后
-选择后者（以可执行文件集成）的话，我们会给到一个不含那两个文件的sdk，这样可以缩小sdk的体积，两个可执行文件可以单独给到。具体方案上的选择可以再沟通。
