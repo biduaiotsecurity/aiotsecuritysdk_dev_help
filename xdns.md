@@ -7,7 +7,7 @@
 <div align=center>xdns技术实现原理图</div>
 
 
-首先，通过Demo APP反射调用android.os.SystemProperties发送启动命令到init进程；
+首先，通过System APP反射调用android.os.SystemProperties发送启动命令到init进程；
 
 其次，init进程通过对启动命令分析init.rc存在的service进而通过shell脚本启动xdns；
 
@@ -26,17 +26,17 @@
 ### 2 编写启动服务
 打开/system/core/rootdir/init.rc文件，在文件末尾加入如下内容：
 ```
-service startxdns /system/bin/sh /system/bin/exxdnsproxy.sh com.baidu.roosdkdemo .MyResultService start
+service startxdns /system/bin/sh /system/bin/exxdnsproxy.sh com.baidu.rootv .MyResultService start
     class core
     disabled
     oneshot
     
- service stopxdns /system/bin/sh /system/bin/exxdnsproxy.sh com.baidu.roosdkdemo .MyResultService stop
+ service stopxdns /system/bin/sh /system/bin/exxdnsproxy.sh com.baidu.rootv .MyResultService stop
     class core
     disabled
     oneshot
 
- service checkxdns /system/bin/sh /system/bin/exxdnsproxy.sh com.baidu.roosdkdemo .MyResultService check
+ service checkxdns /system/bin/sh /system/bin/exxdnsproxy.sh com.baidu.rootv .MyResultService check
     class core
     disabled
     oneshot
