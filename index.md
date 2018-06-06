@@ -188,8 +188,8 @@ public class MyResultService extends AbstractResultService {
     }
 
     @Override
-    public void onDnsFixed(String behaviour, boolean suc)
-        Log.i("onDnsFixed", behaviour + " " + (suc ? "true" : "false"));
+    public void onDnsBehaviourResult(String behaviour, boolean suc)
+        Log.i("onDnsBehaviourResult", behaviour + " " + (suc ? "true" : "false"));
     }
 
     @Override
@@ -411,22 +411,22 @@ public class NedResult implements Serializable {
 04-04 10:31:02.481 14352-15027/com.baidu.roosdkdemo I/onNedScanResult: {"state":{"checktime":0,"code":128},"datas":{"isNotFakeWifi":false,"isWifiArpSafe":false,"isWifiEncryption":false,"isNetOnline":false,"isNotFakeDNS":false,"isWifiSSLSafe":false}}
 ```
 
-### onDnsFixed
+### onDnsBehaviourResult
 ```html
 /**
 * 启动修复dns成功
 */
-06-05 11:00:58.848 19851-20155/? I/onDnsFixed: start_behaviour true
+06-05 11:00:58.848 19851-20155/? I/onDnsBehaviourResult: start_behaviour true
 
 /**
 * 停止修复dns成功
 */
-06-05 11:01:47.848 19851-20155/? I/onDnsFixed: stop_behaviour true
+06-05 11:01:47.848 19851-20155/? I/onDnsBehaviourResult: stop_behaviour true
 
 /**
 * 查询修复dns状态为启动
 */
-06-05 11:01:25.848 19851-20155/? I/onDnsFixed: check_behaviour true
+06-05 11:01:25.848 19851-20155/? I/onDnsBehaviourResult: check_behaviour true
 
 ```
 
