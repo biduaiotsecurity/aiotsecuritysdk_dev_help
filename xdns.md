@@ -2,7 +2,8 @@
 
 ## 技术实现原理
 
-![xdns技术实现原理](https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/image/xdns%E7%9A%84%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86.png) 
+<div align=center><img src="https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/image/xdns%E7%9A%84%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86.png"/></div>
+<div align=center>xdns技术实现原理图</div>
 
 首先，通过System app反射调用android.os.SystemProperties发送启动命令到init进程；
 
