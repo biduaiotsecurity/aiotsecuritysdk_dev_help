@@ -1,7 +1,7 @@
 # xdns接入文档
 
 ## 技术实现原理
-<div align=center><img src="https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/image/xdns%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86.png"/></div>
+<div align=center><img src="https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/image/xdns%E7%9A%84%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86.png"/></div>
 
 
 <div align=center>xdns技术实现原理图</div>
@@ -11,7 +11,7 @@
 
 其次，init进程通过对启动命令分析init.rc存在的service进而通过shell脚本启动xdns；
 
-最后，由xdns通过对shell脚本参数分析进行开启、关闭以及查询xdnsproxy状态。
+最后，由xdns通过对shell脚本参数分析进行开启、关闭以及查询xdnsproxy状态，并且将结果回调到System app。
 
 备注：System app为系统应用。
 
