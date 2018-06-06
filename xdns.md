@@ -7,13 +7,13 @@
 <div align=center>xdns技术实现原理图</div>
 
 
-首先，通过System APP反射调用android.os.SystemProperties发送启动命令到init进程；
+首先，通过System app反射调用android.os.SystemProperties发送启动命令到init进程；
 
 其次，init进程通过对启动命令分析init.rc存在的service进而通过shell脚本启动xdns；
 
 最后，由xdns通过对shell脚本参数分析进行开启、关闭以及查询xdnsproxy状态。
 
-备注：Demo APP必须为system app。
+备注：System app为系统应用。
 
 ## 集成方法
 ### 1 添加执行脚本exxdnsproxy.sh、xdns以及xdnsproxy到/system/bin/目录
