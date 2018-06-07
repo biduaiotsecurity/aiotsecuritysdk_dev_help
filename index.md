@@ -55,7 +55,7 @@ dependencies {
         
 		// 必须在super之后
 		// 参数1 ： ctx
-		// 参数2 ： 回调服务所在的包名
+		// 参数2 ： 回调服务所在的包名,就是最终app的包名。
 		// 参数3 ： 回调服务名
         TVSafe.onApplicationCreate(getApplicationContext(), getApplicationContext().getPackageName(),
                 MyResultService.class.getName());
