@@ -47,7 +47,7 @@ dependencies {
 ## 使用
 
 ### 初始化与配置
-
+这里面的回调是Application的。
 ```
 @Override
     public void onCreate() {
