@@ -138,16 +138,25 @@ public class TVSafe {
 
     /**
      * dns修复
+     * 使用该接口，有两个要求。
+     * 1 必须得有系统权限。
+     * 2 必须同时集成xdns
      */
     public static boolean fixDns()
 
     /**
      * 停止dns修复
+     * 使用该接口，有两个要求。
+     * 1 必须得有系统权限。
+     * 2 必须同时集成xdns
      * */
      public static boolean stopDns()
      
      /**
      * 查看dns修复状态
+     * 使用该接口，有两个要求。
+     * 1 必须得有系统权限。
+     * 2 必须同时集成xdns
      * */
      public static boolean checkDnsStatus()
 
