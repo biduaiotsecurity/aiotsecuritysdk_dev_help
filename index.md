@@ -17,6 +17,9 @@ dependencies {
 
 	// 如果项目中已集成过gson，可以忽略
     compile 'com.google.code.gson:gson:2.8.0'
+    
+    // 最少得集成一个v4包，如果已经集成过v4包，可以忽略
+    compile 'com.android.support:support-v4:25.1.1'
 }
 ```
 
