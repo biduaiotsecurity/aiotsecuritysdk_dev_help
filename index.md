@@ -43,9 +43,8 @@ SDK已经做好混淆规则。
 
     @Override
     protected void attachBaseContext(Context base) {
-	    // 必须在super之前
-        TVSafe.attachBaseContext(this);
         super.attachBaseContext(base);
+	TVSafe.attachBaseContext(this);
     }
 ```
 
