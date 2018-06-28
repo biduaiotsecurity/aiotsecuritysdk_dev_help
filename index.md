@@ -21,27 +21,7 @@ dependencies {
 ```
 
 ## 混淆配置
-```
-##---------------Begin: proguard configuration for Gson  ----------
-# Gson uses generic type information stored in a class file when working with fields. Proguard
-# removes such information by default, so configure it to keep all of it.
--keepattributes Signature
-
-# For using GSON @Expose annotation
--keepattributes *Annotation*
-
-# Gson specific classes
--keep class sun.misc.Unsafe { *; }
-#-keep class com.google.gson.stream.** { *; }
-
-# Application classes that will be serialized/deserialized over Gson
--keep class c.b.libccb.model.model.** { *; }
-
-##---------------End: proguard configuration for Gson  ----------
-
-## keep the service to receive all scan result, you can keep the callbackservice indirect which you created.
--keep public class * extends android.app.Service
-```
+SDK已经做好混淆规则。
 
 
 ## 使用
@@ -64,7 +44,7 @@ dependencies {
     @Override
     protected void attachBaseContext(Context base) {
 	    // 必须在super之前
-        TVSafe.attachBaseContext(base);
+        TVSafe.attachBaseContext(this);
         super.attachBaseContext(base);
     }
 ```
@@ -76,26 +56,12 @@ dependencies {
 ```
 public class TVSafe {
     /**
-     * 启动漏洞扫描（有界面）
-     *
-     * @return true 成功
-     */
-    public static boolean startVulnDetectorUi()
-
-    /**
      * 扫描漏洞
      *
      * @param withPoc 是否包含poc检测，建议传false,带Poc的检测可能会导致设备重启
      * @return true 成功
      */
     public static boolean scanVuln(boolean withPoc) {
-
-    /**
-     * 启动病毒扫描模块（有界面）
-     *
-     * @return true 成功
-     */
-    public static boolean startVirusScannerUi()
 
     /**
      * 扫描病毒
@@ -121,13 +87,6 @@ public class TVSafe {
      */
     public static boolean scanDir(String dir)
 
-
-    /**
-     * 启动网络扫描模块（有界面）
-     *
-     * @return true 成功
-     */
-    public static boolean startNetScannerUi()
 
     /**
      * 静默网络扫描模块(无界面）
@@ -161,22 +120,21 @@ public class TVSafe {
      public static boolean checkDnsStatus()
 
     /**
-     * 通过url获取ip
+     * 静默通过包名启动新模块（无界面）
+     * 启动模块
+     *
+     * @param pkgName 模块名
+     * @return true 成功
      */
-    public static boolean getIPsUrlByDomainUrl(String url)
-
-    /**
-     * 请求url风险信息
-     */
-    public static boolean queryUrlSafeLevel(String url)
+    public static boolean start(String pkgName, String param)
 }
 ```
 
 
 ### 回调
-需要自己建立一个service，继承自`AbstractResultService `。
+需要自己建立一个service，继承自`DefaultResultService `。
 ```
-public class MyResultService extends AbstractResultService {
+public class MyResultService extends DefaultResultService {
     @Override
     public void onAvpScanResult(List<AvpScanResult> list) {
         for (AvpScanResult scanResult : list) {
@@ -214,6 +172,9 @@ public class MyResultService extends AbstractResultService {
 ```
 
 ## 实验结果
+### onInitialized
+根据传递来的bool指，判断是否初始化完成，在这之前，界面可以先转个loading之类的。
+
 ### onAvpScanResult
 ```
 public class AvpScanResult implements Serializable {
@@ -439,56 +400,4 @@ public class NedResult implements Serializable {
 
 ```
 
-### onGetIpResult
-```
-public class DnsResult implements Serializable {
-    /**
-     * 返回代码
-     * 1 ： 解析域名成功
-     * -1 ：解析域名失败
-     * -2 ： 当前无网络
-     * -3 ： 服务器出错
-     * -4 ： 未知错误
-     */
-    public int code;
-    /**
-     * 错误描述
-     */
-    public String err = "";
-    /**
-     * 安全dns解析后的ip列表
-     */
-    public List<String> ips = new ArrayList<>();
-}
-```
 
-```html
-04-10 11:12:31.018 1251-1781/com.baidu.roosdkdemo I/onGetIpResult: code : 1,err : 解析域名成功,ip : 119.75.213.61,ip : 119.75.216.20
-```
-
-### onGetUrlInfoResult
-```
-public class SafeUrlInfo implements Serializable {
-    /**
-     * url
-     */
-    public String url;
-    /**
-     * 安全等级
-     * 1 ：LEVEL_TOP_SAFE
-     * 2 ：LEVEL_SAFE
-     * 3 ：LEVEL_NORMAL
-     * 4 ：LEVEL_LOW_RISK
-     * 5 ：LEVEL_HIGH_RISK
-     * 6 ：LEVEL_MALICIOUS
-     */
-    public int safeLevel;
-    /**
-     * 描述
-     */
-    public String desc;
-```
-
-```html
-04-10 10:53:25.678 31600-382/? I/onGetUrlInfoResult: url : www.baidu.com,safeLevel : 2,desc : null
-```
