@@ -170,6 +170,12 @@ public class MyResultService extends DefaultResultService {
     public void onGetUrlInfoResult(SafeUrlInfo safeUrlInfo) {
         Log.i("onGetUrlInfoResult", safeUrlInfo.toString());
     }
+    
+    @Override
+    public void onInitialized(boolean b) {
+    	// 在这里之前，可以一直转Loading...
+        Log.i("onInitialized", "onInitialized");
+    }
 }
 ```
 
