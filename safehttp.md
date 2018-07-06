@@ -50,6 +50,7 @@ dependencies {
 #### 1.3 混淆
 ```
 -keep class com.baidu.safehttp.** { *; }
+-keep class * implements android.os.IInterface {*;}
 ```
 
 #### 1.4 使用
@@ -102,51 +103,7 @@ LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
 include $(BUILD_JAVA_LIBRARY)
 ```
 
-#### 2.4 修改配置文件
-修改文件libcore/luni/src/main/java/java/security/security.properties
-```
-#
-# Providers
-# See also: J2SE doc. "How to Implement a Provider for the JavaTM Cryptography Architecture"
-#
-# Android's provider of OpenSSL backed implementations
-# modify these lines
-security.provider.1=com.baidu.safehttp.mesalink.jsse.MesaLinkSSLProvider
-security.provider.2=com.android.org.conscrypt.OpenSSLProvider
-# Android's stripped down BouncyCastle provider
-security.provider.3=com.android.org.bouncycastle.jce.provider.BouncyCastleProvider
-# Remaining Harmony providers
-security.provider.4=org.apache.harmony.security.provider.crypto.CryptoProvider
-security.provider.5=com.android.org.conscrypt.JSSEProvider
-# modify end
-
-
-# The default SSLSocketFactory and SSLServerSocketFactory provider implementations.
-# See specification for 
-# javax/net/ssl/SSLSocketFactory.html#getDefault()
-# javax/net/ssl/SSLServerSocketFactory.html#getDefault()
-
-# For regular SSLSockets, we have two implementations:
-# modify this line
-ssl.SocketFactory.provider=com.baidu.safehttp.mesalink.jsse.MesaLinkSSLSocketFactoryImpl
-#ssl.SocketFactory.provider=com.android.org.conscrypt.SSLSocketFactoryImpl
-```
-
-#### 2.5 修改类文件
-libcore/luni/src/main/java/java/security/Security.java
-```
-// modify this method
-// Register default providers
-private static void registerDefaultProviders() {
-    secprops.put("security.provider.1", "com.baidu.safehttp.mesalink.jsse.MesaLinkSSLProvider");
-    secprops.put("security.provider.2", "com.android.org.conscrypt.OpenSSLProvider");
-    secprops.put("security.provider.3", "com.android.org.bouncycastle.jce.provider.BouncyCastleProvider");
-    secprops.put("security.provider.4", "org.apache.harmony.security.provider.crypto.CryptoProvider");
-    secprops.put("security.provider.5", "com.android.org.conscrypt.JSSEProvider");
-}
-```
-
-#### 2.6 添加入口（仅在集成DNS for HTTP时需要）
+#### 2.4 添加入口（仅在集成DNS for HTTP时需要）
 修改类文件frameworks/base/core/java/android/app/Application.java
 ```
 // add import
@@ -158,7 +115,7 @@ public void onCreate() {
 }
 ```
 
-#### 2.7 编译
+#### 2.5 编译
 编译成功之后请检查out/target/product/generic/system/lib文件夹下有没有SDK的so库
 
 如果没有，单独编译一遍conscrypt模块，然后make snod即可
