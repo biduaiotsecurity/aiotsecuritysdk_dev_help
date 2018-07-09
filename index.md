@@ -145,13 +145,16 @@ public class TVSafe {
 需要自己建立一个service，继承自`DefaultResultService `。
 ```
 public class MyResultService extends DefaultResultService {
+    //病毒扫描回调
     @Override
     public void onAvpScanResult(List<AvpScanResult> list) {
+        //如果扫描出没有病毒，那么这个List长度为0.
         for (AvpScanResult scanResult : list) {
             Log.i("onAvpScanResult", scanResult.toString());
         }
     }
 
+    //漏洞扫描回调
     @Override
     public void onVulnScanResult(List<VulnInfo> list) {
         for (VulnInfo vulnInfo : list) {
@@ -159,26 +162,43 @@ public class MyResultService extends DefaultResultService {
         }
     }
 
+    //网络扫描回调
     @Override
     public void onNedScanResult(NedResult result) {
         Log.i("onNedScanResult", result.toString());
     }
 
+    //用于dns修复、停止、检测状态回调
     @Override
     public void onDnsBehaviourResult(String behaviour, boolean suc)
+        String resultTmp = "";
+        String operateTmp = "";
+        switch (behaviour) {
+            case START_BEHAVIOUR:
+                operateTmp = "启动修复dns";
+                resultTmp = suc ? "成功" : "失败";
+                break;
+            case STOP_BEHAVIOUR:
+                operateTmp = "停止修复dns";
+                resultTmp = suc ? "成功" : "失败";
+                break;
+            case CHECK_BEHAVIOUR:
+                operateTmp = "查询修复dns状态";
+                resultTmp = suc ? "开启" : "关闭";
+                break;
+        }
+        final String operate = operateTmp;
+        final String result = resultTmp;
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MyResultService.this, operate + result, Toast.LENGTH_LONG).show();
+            }
+        });
         Log.i("onDnsBehaviourResult", behaviour + " " + (suc ? "true" : "false"));
     }
 
-    @Override
-    public void onGetIpResult(DnsResult dnsResult) {
-        Log.i("onGetIpResult", dnsResult.toString());
-    }
-
-    @Override
-    public void onGetUrlInfoResult(SafeUrlInfo safeUrlInfo) {
-        Log.i("onGetUrlInfoResult", safeUrlInfo.toString());
-    }
-    
+    //所有功能是否已经准备好。
     @Override
     public void onInitialized(boolean b) {
     	// 在这里之前，可以一直转Loading...
@@ -192,6 +212,7 @@ public class MyResultService extends DefaultResultService {
 根据传递来的bool指，判断是否初始化完成，在这之前，界面可以先转个loading之类的。
 
 ### onAvpScanResult
+病毒扫描结果
 ```
 public class AvpScanResult implements Serializable {
     /**
@@ -283,6 +304,7 @@ public class AvpThreatInfo implements Serializable {
 ```
 
 ### onVulnScanResult
+漏洞扫描结果
 ```
 public class VulnInfo implements Serializable {
     /**
@@ -356,6 +378,7 @@ public class VulnInfo implements Serializable {
 
 
 ### onNedScanResult
+网络扫描结果，下面这些boolean值，哪个返回false说明哪个有问题。
 ```
 public class NedResult implements Serializable {
     /**
@@ -398,6 +421,7 @@ public class NedResult implements Serializable {
 ```
 
 ### onDnsBehaviourResult
+dns修复、停止、检测状态回调
 ```html
 /**
 * 启动修复dns成功
