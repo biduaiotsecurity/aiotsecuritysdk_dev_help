@@ -2,9 +2,9 @@
 
 # 目录
 * [技术实现原理](#技术实现原理)
-* [Android 5.X 集成方法](#Android 5.X 集成方法)
-* [Android 6.X 集成方法](#Android 6.X 集成方法)
-* [Android 7.X 集成方法](#Android 7.X 集成方法)
+* [Android5.X版本集成方法](#Android5.X版本集成方法)
+* [Android6.X版本集成方法](#Android6.X版本集成方法)
+* [Android7.X版本集成方法](#Android7.X版本集成方法)
 
 
 
@@ -21,7 +21,7 @@
 
 备注：System app为系统应用。
 
-## Android 5.X 集成方法
+## Android5.X版本集成方法
 ### 1 添加执行脚本exxdnsproxy.sh、xdns以及xdnsproxy到/system/bin/目录
 步骤一：在android源码目录下的/system/core/rootdir/下新建xdns目录；
 
@@ -69,7 +69,7 @@ allow system_app ctl_default_prop:property_service{set};
 ### 4 如何启动、关闭以及查询xdns
 请查阅链接中的调用方法：https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/index.md
 
-## Android 6.X 集成方法
+## Android6.X版本集成方法
 ### 1 添加执行脚本exxdnsproxy.sh、xdns以及xdnsproxy到/system/bin/目录
 步骤一：在android源码目录下的/system/core/rootdir/下新建xdns目录；
 
@@ -169,7 +169,7 @@ neverallow { domain -init -system_app #增加此处} default_prop:property_servi
 ### 4 如何启动、关闭以及查询xdns
 请查阅链接中的调用方法：https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/index.md
 
-## Android 7.X 集成方法
+## Android7.X版本集成方法
 ### 1 添加执行脚本exxdnsproxy.sh、xdns以及xdnsproxy到/system/bin/目录
 步骤一：在android源码目录下的/system/core/rootdir/下新建xdns目录；
 
