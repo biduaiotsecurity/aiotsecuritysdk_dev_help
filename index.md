@@ -107,25 +107,31 @@ public class TVSafe {
 
     /**
      * dns修复
-     * 使用该接口，有两个要求。
-     * 1 必须得有系统权限。
-     * 2 必须同时集成xdns
-     */
+     * 使用该接口，要满足下面的两个条件之中的一个。
+     * 1 集成xdns，必须得有系统权限。
+     * 2 集成safehttp，如果全系统生效，得有系统权限，如果单个app集成，可以不需要系统权限。
+     * xdns文档：https://baidutvsafe.github.io/xdns
+     * safehttp文档：https://baidutvsafe.github.io/safehttp
+     * */
     public static boolean fixDns()
 
     /**
      * 停止dns修复
-     * 使用该接口，有两个要求。
-     * 1 必须得有系统权限。
-     * 2 必须同时集成xdns
+     * 使用该接口，要满足下面的两个条件之中的一个。
+     * 1 集成xdns，必须得有系统权限。
+     * 2 集成safehttp，如果全系统生效，得有系统权限，如果单个app集成，可以不需要系统权限。
+     * xdns文档：https://baidutvsafe.github.io/xdns
+     * safehttp文档：https://baidutvsafe.github.io/safehttp
      * */
      public static boolean stopDns()
      
      /**
      * 查看dns修复状态
-     * 使用该接口，有两个要求。
-     * 1 必须得有系统权限。
-     * 2 必须同时集成xdns
+     * 使用该接口，要满足下面的两个条件之中的一个。
+     * 1 集成xdns，必须得有系统权限。
+     * 2 集成safehttp，如果全系统生效，得有系统权限，如果单个app集成，可以不需要系统权限。
+     * xdns文档：https://baidutvsafe.github.io/xdns
+     * safehttp文档：https://baidutvsafe.github.io/safehttp
      * */
      public static boolean checkDnsStatus()
 
