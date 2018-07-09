@@ -56,7 +56,107 @@ service startxdns /system/bin/sh /system/bin/exxdnsproxy.sh start
 ```
 allow system_app ctl_default_prop:property_service{set};
 ```
-步骤四：在/exrernal/sepolicy/目录下，输入指令:"mm"进行模块编译，然后将此模块编译进入system.img中。
+步骤四：在/exrernal/sepolicy/目录下，输入指令:"mm"进行模块编译，然后将此模块编译进入boot.img中。
+
+## 4 如何启动、关闭以及查询xdns
+请查阅链接中的调用方法：https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/index.md
+
+# Android 6.X 集成方法
+## 1 添加执行脚本exxdnsproxy.sh、xdns以及xdnsproxy到/system/bin/目录
+步骤一：在android源码目录下的/system/core/rootdir/下新建xdns目录；
+
+步骤二：将Android.mk、exxdnshproxy.sh、xdns以及xdnsproxy放到此目录system/core/rootdir/xdns/下；
+
+步骤三：在system/core/rootdir/xdns/目录下，输入指令:"mm"进行模块编译，然后将此模块编译进入system.img中。
+
+## 2 编写启动服务
+打开/system/core/rootdir/init.rc文件，在文件末尾加入如下内容：
+```
+service startxdns /system/bin/sh /system/bin/exxdnsproxy.sh start
+    class core
+    disabled
+    oneshot
+    seclabel u:r:xdns:s0
+    
+ service stopxdns /system/bin/sh /system/bin/exxdnsproxy.sh stop
+    class core
+    disabled
+    oneshot
+    seclabel u:r:xdns:s0
+
+ service checkxdns /system/bin/sh /system/bin/exxdnsproxy.sh check
+    class core
+    disabled
+    oneshot
+    seclabel u:r:xdns:s0
+```
+
+## 3 编写selinux规则te文件
+步骤一：将xdns.te以及xdnsproxy.te放到android源码目录下的/exrernal/sepolicy/下；
+
+步骤二：打开android源码目录下的/exrernal/sepolicy/flie_contexts文件，在文件末尾加入如下内容：
+```
+/system/bin/xdnsproxy u:object_r:xdnsproxy_exec:s0
+
+/system/bin/xdns u:object_r:xdns_exec:s0
+```
+
+步骤三：打开android源码目录下的/exrernal/sepolicy/domain.te，修改如下内容：
+```
+neverallow {
+  domain
+  -debuggerd
+  -vold
+  -dumpstate
+  -system_server
+  userdebug_or_eng(`-procrank')
+  userdebug_or_eng(`-perfprofd')
+  -xdns #增加此处
+} self:capability sys_ptrace;
+
+neverallow {
+  domain
+  -appdomain
+  -dumpstate
+  -shell
+  userdebug_or_eng(`-su')
+  -system_server
+  -zygote
+  -xdns #增加此处
+} { file_type -system_file -exec_type }:file execute;
+
+neverallow {
+  domain
+  -init # TODO: limit init to relabelfrom for files
+  -zygote
+  -installd
+  -dex2oat
+  -xdns #增加此处
+} dalvikcache_data_file:file no_w_file_perms;
+
+neverallow {
+  domain
+  -init
+  -installd
+  -dex2oat
+  -zygote
+  -xdns #增加此处
+} dalvikcache_data_file:dir no_w_dir_perms;
+
+neverallow {
+  domain
+  -system_server
+  -system_app
+  -init
+  -xdns #增加此处
+  -installd # for relabelfrom and unlink, check for this in explicit neverallow
+} system_data_file:file no_w_file_perms;
+
+neverallow { domain -init -system_app #增加此处} default_prop:property_service set;
+
+```
+
+步骤四：在源码根目录下，输入指令:"makebootimage"进行模块编译，然后将此模块编译进入boot.img中。
 
 ## 4 如何启动、关闭以及查询xdns
 请查阅链接中的调用方法：https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/index.md
