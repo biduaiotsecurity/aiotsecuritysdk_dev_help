@@ -2,9 +2,9 @@
 
 # 目录
 * [技术实现原理](#技术实现原理)
-* [Android5.X版本集成方法](#Android5X版本集成方法)
-* [Android6.X版本集成方法](#Android6X版本集成方法)
-* [Android7.X版本集成方法](#Android7X版本集成方法)
+* [Android5.X版本集成方法](#Android5x版本集成方法)
+* [Android6.X版本集成方法](#Android6x版本集成方法)
+* [Android7.X版本集成方法](#Android7x版本集成方法)
 
 
 
