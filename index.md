@@ -251,6 +251,8 @@ public class AvpScanResult implements Serializable {
     private boolean isStubbornVirus;
     /**
      * 是否是样本统计病毒
+     * 这个字段是 是否是需要通缉的样本？如果是 可以调用upload上传到我们服务器
+     * 如果不关心 这个样本通缉的功能，可以忽略这个字段
      */
     private boolean isSampleWanted;
 }
