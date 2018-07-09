@@ -80,6 +80,14 @@ public class TVSafe {
      * @return true 成功
      */
     public static boolean scanApkFile(String filePath)
+    
+    /**
+     * 静默启动病毒扫描模块，扫描指定文件列表(无界面）
+     *
+     * @param files 欲扫描的文件List(绝对路径)
+     * @return true 成功
+     */
+    public static boolean scanApkFiles(List<String> files)
 
     /**
      * 静默启动病毒扫描模块， 扫描指定路径(无界面）
