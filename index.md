@@ -67,6 +67,7 @@ public class TVSafe {
 
     /**
      * 扫描病毒
+     * 样本下载：链接: https://pan.baidu.com/s/1NN_Afvji_BVfmSBRhh1wHQ 密码: fuy9
      *
      * @param sysApp 是否包含系统app，建议传false。
      * @return true 成功
@@ -75,6 +76,7 @@ public class TVSafe {
 
     /**
      * 静默启动病毒扫描模块，扫描指定文件(无界面）
+     * 样本下载：链接: https://pan.baidu.com/s/1NN_Afvji_BVfmSBRhh1wHQ 密码: fuy9
      *
      * @param filePath 文件绝对路径
      * @return true 成功
@@ -83,7 +85,8 @@ public class TVSafe {
     
     /**
      * 静默启动病毒扫描模块，扫描指定文件列表(无界面）
-     *
+     * 样本下载：链接: https://pan.baidu.com/s/1NN_Afvji_BVfmSBRhh1wHQ 密码: fuy9
+     * 
      * @param files 欲扫描的文件List(绝对路径)
      * @return true 成功
      */
@@ -91,7 +94,8 @@ public class TVSafe {
 
     /**
      * 静默启动病毒扫描模块， 扫描指定路径(无界面）
-     *
+     * 样本下载：链接: https://pan.baidu.com/s/1NN_Afvji_BVfmSBRhh1wHQ 密码: fuy9
+     * 
      * @param dir 文件夹路径
      * @return true 成功
      */
@@ -219,6 +223,7 @@ public class MyResultService extends DefaultResultService {
 
 ### onAvpScanResult
 病毒扫描结果
+样本下载：链接: https://pan.baidu.com/s/1NN_Afvji_BVfmSBRhh1wHQ 密码: fuy9
 ```
 public class AvpScanResult implements Serializable {
     /**
