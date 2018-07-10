@@ -4,8 +4,8 @@
 风险apk样本在githubfengxian文件夹里，可以下载。
 也可以去百度云链接下载，https://pan.baidu.com/s/1NN_Afvji_BVfmSBRhh1wHQ 密码: fuy9
 
-#Q&A
-##UnsatisfiedLinkError导致网络安全扫描不可用。
+# Q&A
+## UnsatisfiedLinkError导致网络安全扫描不可用。
 一般这种问题就是so平台混用导致的。
 07-10 16:38:05.837 W/System.err(14028): java.lang.UnsatisfiedLinkError: dalvik.system.PathClassLoader[DexPathList[[zip file "/data/app/com.coocaa.tvmanager-1/base.apk"],nativeLibraryDirectories=[/data/app/com.coocaa.tvmanager-1/lib/arm, /vendor/lib, /system/lib]]] couldn't find "libtvshield.so"
 07-10 16:38:05.838 W/System.err(14028):         at java.lang.Runtime.loadLibrary(Runtime.java:366)
