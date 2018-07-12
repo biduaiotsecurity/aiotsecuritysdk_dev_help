@@ -22,6 +22,7 @@
   源码位置：
   android-4.4.0_r1.0/xref/art/runtime/class_linker.cc
   
+  ```
   static void ThrowEarlierClassFailure(mirror::Class* c)
         SHARED_LOCKS_REQUIRED(Locks::mutator_lock_) {
       // The class failed to initialize on a previous attempt, so we want to throw
@@ -45,9 +46,11 @@
                             PrettyDescriptor(c).c_str());
       }
   }
+  ```
   
   再结合之前的log来看：
   
+  ```
   47:50.200 4545-4597/com.coocaa.tvmanager:p1 W/dalvikvm: VFY: unable to resolve static method 8532: Lcom/google/gson/internal/$Gson$Types;.e (Ljava/lang/reflect/Type;)Ljava/lang/Class;
   07-11 10:47:50.200 4545-4597/com.coocaa.tvmanager:p1 D/dalvikvm: VFY: replacing opcode 0x71 at 0x003c
   07-11 10:47:50.200 4545-4597/com.coocaa.tvmanager:p1 I/dalvikvm: Could not find method com.google.gson.internal.$Gson$Types.f, referenced from method com.google.gson.b.a.toString
@@ -58,5 +61,6 @@
   07-11 10:47:50.225 4545-4597/com.coocaa.tvmanager:p1 I/avpsdk: [thread : pool-3-thread-1 : 325] [EnterpriseEditionAvpScanEngine] Enterprise startScan exception : com.google.gson.internal.$Gson$Types.d
   07-11 10:47:50.225 4545-4597/com.coocaa.tvmanager:p1 W/System.err: java.lang.NoSuchMethodError: com.google.gson.internal.$Gson$Types.d
   07-11 10:47:50.230 4545-4597/com.coocaa.tvmanager:p1 W/System.err:     at com.google.gson.b.a.getSuperclassTypeParameter(TypeToken.java:87)
+  ```
   
   很明显一定是你们是目标系统集成了gson的某个版本，有可能版本不匹配或者是没有混淆，在双亲委派时候，优先使用系统类中已经加载过的gson，里面细节对不上，再在这个加载好的类里去找某个类，也就classnofound了。最后解决办法就是我们的gson不混淆。这样可以规避问题，不过如果gson版本差异过大，那只有最后的解决方案：就是我们的gson源码拉下来，改个包名。
