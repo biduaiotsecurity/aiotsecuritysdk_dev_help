@@ -269,7 +269,25 @@ neverallow {
 neverallow { domain -init -system_app #增加此处} default_prop:property_service set;
 ```
 
-步骤四：在源码根目录下，输入指令:"makebootimage"进行模块编译，然后将此模块编译进入boot.img中。
+步骤四：打开android源码目录下的/system/sepolicy/app.te，修改如下内容：
+```
+# Blacklist app domains not allowed to execute from /data
+neverallow {
+  bluetooth
+  isolated_app
+  nfc
+  radio
+  shared_relro
+  #system_app #注释掉
+} {
+  data_file_type
+  -dalvikcache_data_file
+  -system_data_file # shared libs in apks
+  -apk_data_file
+}:file no_x_file_perms;
+```
+
+步骤五：在源码根目录下，输入指令:"makebootimage"进行模块编译，然后将此模块编译进入boot.img中。
 
 ### 4 如何启动、关闭以及查询xdns
 请查阅链接中的调用方法：https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/index.md
