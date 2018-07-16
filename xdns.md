@@ -5,7 +5,7 @@
 * [android5x版本集成方法](#android5x版本集成方法)
 * [android6x版本集成方法](#android6x版本集成方法)
 * [android7x版本集成方法](#android7x版本集成方法)
-
+* [android8x版本集成方法](#android8x版本集成方法)
 
 
 ## 技术实现原理
@@ -288,6 +288,119 @@ neverallow {
 ```
 
 步骤五：在源码根目录下，输入指令:"makebootimage"进行模块编译，然后将此模块编译进入boot.img中。
+
+### 4 如何启动、关闭以及查询xdns
+请查阅链接中的调用方法：https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/index.md
+
+## Android8.X版本集成方法
+### 1 添加执行脚本exxdnsproxy.sh、xdns以及xdnsproxy到/system/bin/目录
+步骤一：在android源码目录下的/system/core/rootdir/下新建xdns目录；
+
+步骤二：将Android.mk、exxdnshproxy.sh、xdns以及xdnsproxy放到此目录system/core/rootdir/xdns/下；
+
+步骤三：在system/core/rootdir/xdns/目录下，输入指令:"mm"进行模块编译，然后将此模块编译进入system.img中。
+
+### 2 编写启动服务
+打开/system/core/rootdir/init.rc文件，在文件末尾加入如下内容：
+```
+service startxdns /system/bin/sh /system/bin/exxdnsproxy.sh start
+    class core
+    disabled
+    oneshot
+    seclabel u:r:xdns:s0
+    
+ service stopxdns /system/bin/sh /system/bin/exxdnsproxy.sh stop
+    class core
+    disabled
+    oneshot
+    seclabel u:r:xdns:s0
+
+ service checkxdns /system/bin/sh /system/bin/exxdnsproxy.sh check
+    class core
+    disabled
+    oneshot
+    seclabel u:r:xdns:s0
+```
+
+### 3 编写selinux规则te文件
+步骤一：将private/xdns.te以及private/xdnsproxy.te放到android源码目录下的/system/sepolicy/private/下；
+
+步骤二：将public/xdns.te放到android源码目录下的/system/sepolicy/public/下；
+
+步骤三：将vendor/xdns.te放到android源码目录下的/system/sepolicy/vendor/下；
+
+步骤四：打开android源码目录下的/system/sepolicy/private/flie_contexts文件，在文件末尾加入如下内容：
+```
+/system/bin/xdnsproxy u:object_r:xdnsproxy_exec:s0
+
+/system/bin/xdns u:object_r:xdns_exec:s0
+```
+
+步骤五：打开android源码目录下的/system/sepolicy/private/domain.te，修改如下内容：
+```
+# with other UIDs to these whitelisted domains.
+neverallow {
+  domain
+  -vold
+  -dumpstate
+  -storaged
+  -system_server
+  userdebug_or_eng(`-perfprofd')
+  -xdns #增加此处
+} self:capability sys_ptrace;
+```
+
+步骤六：打开android源码目录下的/system/sepolicy/private/app.te，修改如下内容：
+```
+# Blacklist app domains not allowed to execute from /data
+neverallow {
+  bluetooth
+  isolated_app
+  nfc
+  radio
+  shared_relro
+  -system_app #增加此处
+} {
+  data_file_type
+  -dalvikcache_data_file
+  -system_data_file # shared libs in apks
+  -apk_data_file
+}:file no_x_file_perms;
+
+neverallow { appdomain -platform_app -system_app # 增加此处}
+    apk_data_file:dir_file_class_set
+    { create write setattr relabelfrom relabelto append unlink link rename };
+```
+
+步骤七：打开android源码目录下的/system/sepolicy/public/domain.te，修改如下内容：
+```
+neverallow {
+  domain
+  -adbd
+  -dumpstate
+  -hal_drm
+  -init
+  -mediadrmserver
+  -recovery
+  -shell
+  -system_server
+  -xdns #增加此处
+} serialno_prop:file r_file_perms;
+
+neverallow {
+  domain
+  -xdns #增加此处
+  -system_server
+  -system_app
+  -init
+  -installd # for relabelfrom and unlink, check for this in explicit neverallow
+  with_asan(`-asan_extract')
+} system_data_file:file no_w_file_perms;
+
+neverallow { domain -init -system_app #增加此处} default_prop:property_service set;
+```
+
+步骤八：在源码根目录下，输入指令:"make -j4"进行模块编译，然后将此模块编译进入boot.img/system.img/vendor.img中。
 
 ### 4 如何启动、关闭以及查询xdns
 请查阅链接中的调用方法：https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/index.md
