@@ -23,11 +23,11 @@ safehttp-release.aar
 
 SDK for Framework：
 
-总共两个文件
+总共两个文件夹
 
-一个so库：libmesalink-jni.so
+jniLibs文件夹：分别包含armabi-v7a与arm64-v8a两个架构的so库，对应分别存放与arm与arm64子文件夹内
 
-一个jar包：safehttp.jar
+libs文件夹：包含一个jar包safehttp.jar
 
 ## 集成方法
 ### 1 集成到APP当中
@@ -64,11 +64,9 @@ public void onCreate() {
 ```
 
 ### 2 集成到Android Framework当中
-#### 2.1 添加so文件到系统工程
-在源码目录中找到external/conscrypt文件夹，在其中新建目录jniLibs，将对应abi的libmesalink-jni.so拷贝到其中对应的子目录当中
-#### 2.2 添加jar包到系统
-在源码目录中找到external/conscrypt文件夹，在其中新建目录libs，将safehttp.jar拷贝到其中
-#### 2.3 修改编译脚本
+#### 2.1 拷贝文件
+在源码目录中找到external/conscrypt文件夹，将libs与jniLibs文件夹拷贝到其中
+#### 2.2 修改编译脚本
 在源码目录中找到external/conscrypt文件夹，修改其中的Android.mk文件：
 ```
 core_cflags := -Wall -Wextra -Werror
@@ -77,9 +75,21 @@ core_cppflags := -std=gnu++11
 # add these lines
 include $(CLEAR_VARS)
 LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES := safehttp:libs/safehttp.jar
-LOCAL_PREBUILT_LIBS := libmesalink-jni:jniLibs/armeabi/libmesalink-jni.so
 LOCAL_MODULE_TAGS := optional
 include $(BUILD_MULTI_PREBUILT)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE := libmesalink-jni
+LOCAL_MODULE_SUFFIX := .so
+LOCAL_MODULE_CLASS := SHARED_LIBRARIES
+LOCAL_SRC_FILES_arm := jniLibs/arm/libmesalink-jni.so
+###### 如果是64位系统，添加以下几行 #####
+#LOCAL_SRC_FILES_arm64 := jniLibs/arm64/libmesalink-jni.so
+#LOCAL_MODULE_TARGET_ARCHS := arm arm64
+#LOCAL_MULTILIB := both
+##### end #####
+include $(BUILD_PREBUILT)
 # add end
 
 # Build for the target (device).
@@ -103,7 +113,35 @@ LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
 include $(BUILD_JAVA_LIBRARY)
 ```
 
-#### 2.4 添加入口（仅在集成DNS for HTTP时需要）
+#### 2.3 添加编译项目
+修改build/target/product/core.mk，PRODUCT_PACKAGES的最后一行在添加以下内容：
+```
+PRODUCT_PACKAGES += \
+    BasicDreamd \
+    ......
+    MmsService \
+# add this line, and a '\' at the end of the previous line
+    libmesalink-jni
+```
+
+#### 2,4 添加模块白名单
+修改build/core/tasks/check_boot_jars/package_whitelist.txt，在最后添加以下内容：
+```
+com\.baidu\..*
+```
+
+#### 2.5 修改te规则
+修改文件system/sepolicy/system_server.te，将
+```
+neverallow system_server self:process execmem;
+```
+修改为
+```
+allow system_server self:process execmem;
+```
+如果没有这一行内容，请忽略
+
+#### 2.6 添加入口（仅在集成DNS for HTTP时需要）
 修改类文件frameworks/base/core/java/android/app/Application.java
 ```
 // add import
