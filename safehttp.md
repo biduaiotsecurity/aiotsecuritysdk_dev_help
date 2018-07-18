@@ -164,7 +164,7 @@ public void onCreate() {
 }
 ```
 
-#### 2.5 编译
+#### 2.7 编译
 编译成功之后请检查out/target/product/generic/system/lib文件夹下有没有SDK的so库
 
 如果没有，单独编译一遍conscrypt模块，然后make snod即可
