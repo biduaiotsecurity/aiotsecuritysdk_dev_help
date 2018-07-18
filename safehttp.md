@@ -65,9 +65,13 @@ public void onCreate() {
 
 ### 2 集成到Android Framework当中
 #### 2.1 拷贝文件
-在源码目录中找到external/conscrypt文件夹，将libs与jniLibs文件夹拷贝到其中
+在Android4.4.4及以下系统，找到libcore文件夹
+在Android5.0及以上系统，找到external/conscrypt文件夹
+将libs与jniLibs文件夹拷贝到其中
 #### 2.2 修改编译脚本
-在源码目录中找到external/conscrypt文件夹，修改其中的Android.mk文件：
+在Andriod4.4.4及以下系统，修改libcore/JavaLibrary.mk
+在Android5.0及以上系统，修改external/conscrypt/Android.mk
+
 ```
 core_cflags := -Wall -Wextra -Werror
 core_cppflags := -std=gnu++11
@@ -131,7 +135,9 @@ com\.baidu\..*
 ```
 
 #### 2.5 修改te规则
-修改文件system/sepolicy/system_server.te，将
+在Android7.1及以下系统，修改文件system/sepolicy/system_server.te
+在Android8.0及以上系统，修改文件system/sepolicy/private/system_server.te
+将
 ```
 neverallow system_server self:process execmem;
 ```
@@ -139,7 +145,7 @@ neverallow system_server self:process execmem;
 ```
 allow system_server self:process execmem;
 ```
-如果没有这一行内容，请忽略
+如果没有找到这个文件或者文件中没有这一行内容，请忽略这一项
 
 #### 2.6 添加入口（仅在集成DNS for HTTP时需要）
 修改类文件frameworks/base/core/java/android/app/Application.java
