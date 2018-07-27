@@ -5,6 +5,17 @@
 也可以去百度云链接下载，https://pan.baidu.com/s/1NN_Afvji_BVfmSBRhh1wHQ 密码: fuy9
 
 # Q&A
+## abi架构的问题
+我们目前提供两个armeabi-v7a arm64-v8a，到时候你们集成目标机如果是armeabi的，那就把里面arm64-v8a文件夹直接删除掉，把armeabi-v7a改成armeabi即可，
+如果是armeabi-v7a，就把arm64-v8a删掉即可。
+如果是arm64-v8a，那就把armeabi-v7a 删掉即可。
+
+## 功能内置需求
+我们可以提供内置功能，好处就是没网情况下可以体验功能，坏处就是集成的aar会增大。全部功能性文件大约5M。如有需要请与我们联系。
+
+## demo
+我们有提供demo，如有需要请与我们联系。
+
 ## UnsatisfiedLinkError导致网络安全扫描不可用。
 一般这种问题就是so平台混用导致的。
 07-10 16:38:05.837 W/System.err(14028): java.lang.UnsatisfiedLinkError: dalvik.system.PathClassLoader[DexPathList[[zip file "/data/app/com.coocaa.tvmanager-1/base.apk"],nativeLibraryDirectories=[/data/app/com.coocaa.tvmanager-1/lib/arm, /vendor/lib, /system/lib]]] couldn't find "libtvshield.so"
