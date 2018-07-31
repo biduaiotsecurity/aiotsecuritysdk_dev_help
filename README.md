@@ -10,6 +10,34 @@
 如果是armeabi-v7a，就把arm64-v8a删掉即可。
 如果是arm64-v8a，那就把armeabi-v7a 删掉即可。
 
+## dlopen failed: couldn't map Permission denied
+由于selinux的存在，在作为系统app时，有一些行为是不被允许的，这时候可能会出现如下的问题，见下log
+```
+dlopen("/data/data/com.baidu.roosdkdemo/files/.tvshield_1/lib/2.6.4.8/391128228/armeabi/libtvshieldsec2648.so", RTLD_LAZY) 
+failed: dlopen failed: couldn't map "/data/data/com.baidu.roosdkdemo/files/.tvshield_1/lib/2.6.4.8/391128228/armeabi/libtvshieldsec2648.so" 
+segment 2: Permission denied
+
+
+07-31 02:35:38.050 5947-5947/com.baidu.roosdkdemo:p0 W/u.roosdkdemo:p0: type=1400 audit(0.0:37): 
+avc: denied { execute } for path="/data/data/com.baidu.roosdkdemo/app_p_od/-1136690744.dex" dev="mmcblk0p28" 
+ino=81770 scontext=u:r:system_app:s0 tcontext=u:object_r:system_app_data_file:s0 tclass=file
+07-31 02:35:38.104 6811-6811/? I/dex2oat: /system/bin/dex2oat --runtime-arg -classpath --runtime-arg  
+--instruction-set=arm --instruction-set-features=div --runtime-arg -Xrelocate --boot-image=/system/framework/boot.art 
+--dex-file=/data/user/0/com.baidu.roosdkdemo/app_p_a/-1136690744.jar --oat-fd=94 --oat-location=/data/user/0/com.baidu.roosdkdemo/app_p_od/-1136690744.dex 
+--runtime-arg -Xms64m --runtime-arg -Xmx512m
+
+
+W/u.roosdkdemo:p0: type=1400 audit(0.0:39): avc: denied { execute } 
+for path="/data/data/com.baidu.roosdkdemo/app_p_n/-1136690744/libguardfunc.so" dev="mmcblk0p28" ino=81763 
+scontext=u:r:system_app:s0 tcontext=u:object_r:system_app_data_file:s0 tclass=file
+
+07-31 02:35:40.770 5947-5947/com.baidu.roosdkdemo:p0 E/art: dlopen("/data/user/0/com.baidu.roosdkdemo/app_p_n/-1136690744/libguardfunc.so", RTLD_LAZY) 
+failed: dlopen failed: couldn't map "/data/user/0/com.baidu.roosdkdemo/app_p_n/-1136690744/libguardfunc.so" segment 1: Permission denied
+```
+
+出现这种问题的时候，加一条te规则到系统中就可以了
+allow system_app system_app_data_file:file execute
+
 ## 功能内置需求
 我们可以提供内置功能，好处就是没网情况下可以体验功能，坏处就是集成的aar会增大。全部功能性文件大约5M。如有需要请与我们联系。
 
