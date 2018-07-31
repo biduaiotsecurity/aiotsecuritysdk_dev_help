@@ -26,6 +26,10 @@ dependencies {
 ## 混淆配置
 SDK已经做好混淆规则。
 
+## te规则
+如果是系统app集成，则需要加一条te规则。
+allow system_app system_app_data_file:file execute
+
 
 ## 使用
 
