@@ -29,6 +29,7 @@ SDK已经做好混淆规则。
 ## te规则
 如果是系统app集成，则需要加一条te规则。
 allow system_app system_app_data_file:file execute
+如果关闭了selinux可以忽略。
 
 
 ## 使用
@@ -67,19 +68,28 @@ public class TVSafe {
      * @param withPoc 是否包含poc检测，建议传false,带Poc的检测可能会导致设备重启
      * @return true 成功
      */
-    public static boolean scanVuln(boolean withPoc) {
+    public static boolean scanVuln(boolean withPoc) 
 
     /**
-     * 扫描病毒
+     * 扫描病毒（快速）
      * 样本下载：链接: https://pan.baidu.com/s/1NN_Afvji_BVfmSBRhh1wHQ 密码: fuy9
      *
      * @param sysApp 是否包含系统app，建议传false。
      * @return true 成功
      */
     public static boolean scanVirus(boolean sysApp)
+    
+    /**
+     * 扫描病毒，使用多个引擎（较慢）
+     *
+     * @param sysApp 是否包含系统app，建议传false。
+     * @return true 成功
+     */
+    @SuppressWarnings("unused")
+    public static boolean fullScanVirus(boolean sysApp) 
 
     /**
-     * 静默启动病毒扫描模块，扫描指定文件(无界面）
+     * 静默启动病毒扫描模块，扫描指定文件
      * 样本下载：链接: https://pan.baidu.com/s/1NN_Afvji_BVfmSBRhh1wHQ 密码: fuy9
      *
      * @param filePath 文件绝对路径
@@ -88,7 +98,7 @@ public class TVSafe {
     public static boolean scanApkFile(String filePath)
     
     /**
-     * 静默启动病毒扫描模块，扫描指定文件列表(无界面）
+     * 静默启动病毒扫描模块，扫描指定文件列表
      * 样本下载：链接: https://pan.baidu.com/s/1NN_Afvji_BVfmSBRhh1wHQ 密码: fuy9
      * 
      * @param files 欲扫描的文件List(绝对路径)
@@ -97,7 +107,7 @@ public class TVSafe {
     public static boolean scanApkFiles(List<String> files)
 
     /**
-     * 静默启动病毒扫描模块， 扫描指定路径(无界面）
+     * 静默启动病毒扫描模块， 扫描指定路径
      * 样本下载：链接: https://pan.baidu.com/s/1NN_Afvji_BVfmSBRhh1wHQ 密码: fuy9
      * 
      * @param dir 文件夹路径
@@ -107,7 +117,7 @@ public class TVSafe {
 
 
     /**
-     * 静默网络扫描模块(无界面）
+     * 静默网络扫描模块
      *
      * @return true 成功
      */
@@ -144,7 +154,7 @@ public class TVSafe {
      public static boolean checkDnsStatus()
 
     /**
-     * 静默通过包名启动新模块（无界面）
+     * 静默通过包名启动新模块
      * 启动模块
      *
      * @param pkgName 模块名
