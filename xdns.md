@@ -433,7 +433,7 @@ neverallow {
 }:file no_x_file_perms;
 
 neverallow { appdomain -platform_app 
-+ -system_app # 增加此处}
++ -system_app }
     apk_data_file:dir_file_class_set
     { create write setattr relabelfrom relabelto append unlink link rename };
 ```
