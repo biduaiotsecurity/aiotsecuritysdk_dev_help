@@ -242,45 +242,45 @@ neverallow { domain -init
 
 ### 2 编写启动服务
 打开/system/core/rootdir/init.rc或者在被包含编译路径下的device/XXX/XXX/init.XXX.rc文件，在文件末尾加入如下内容：
-```
-service startxdns /system/bin/sh /system/bin/exxdnsproxy.sh start
-    class core
-    disabled
-    oneshot
-    seclabel u:r:xdns:s0
+```diff
++ service startxdns /system/bin/sh /system/bin/exxdnsproxy.sh start
++     class core
++     disabled
++     oneshot
++     seclabel u:r:xdns:s0
     
- service stopxdns /system/bin/sh /system/bin/exxdnsproxy.sh stop
-    class core
-    disabled
-    oneshot
-    seclabel u:r:xdns:s0
++ service stopxdns /system/bin/sh /system/bin/exxdnsproxy.sh stop
++     class core
++     disabled
++     oneshot
++     seclabel u:r:xdns:s0
 
- service checkxdns /system/bin/sh /system/bin/exxdnsproxy.sh check
-    class core
-    disabled
-    oneshot
-    seclabel u:r:xdns:s0
++ service checkxdns /system/bin/sh /system/bin/exxdnsproxy.sh check
++     class core
++     disabled
++     oneshot
++     seclabel u:r:xdns:s0
 ```
 
 ### 3 编写selinux规则te文件
 步骤一：将xdns.te以及xdnsproxy.te放到android源码目录下的device/XXX/XXX/sepolicy下；
 
 步骤二：打开android源码目录下的device/XXX/XXX/sepolicy/flie_contexts文件，在文件末尾加入如下内容：
-```
-/system/bin/xdnsproxy u:object_r:xdnsproxy_exec:s0
+```diff
++ /system/bin/xdnsproxy u:object_r:xdnsproxy_exec:s0
 
-/system/bin/xdns u:object_r:xdns_exec:s0
++ /system/bin/xdns u:object_r:xdns_exec:s0
 ```
 
 步骤三：打开android源码目录下的/system/sepolicy/domain.te，修改如下内容：
-```
+```diff
 neverallow {
   domain
   -debuggerd
   -vold
   -dumpstate
   -system_server
-  -xdns #增加此处
++  -xdns #增加此处
   userdebug_or_eng(`-perfprofd')
 } self:capability sys_ptrace;
 
@@ -293,7 +293,7 @@ neverallow {
   userdebug_or_eng(`-su')
   -system_server
   -zygote
-  -xdns #增加此处
++  -xdns #增加此处
 } { file_type -system_file -exec_type -postinstall_file }:file execute
 
 neverallow {
@@ -305,7 +305,7 @@ neverallow {
   -cppreopts
   -dex2oat
   -otapreopt_slot
-  -xdns #增加此处
++ -xdns #增加此处
 } dalvikcache_data_file:file no_w_file_perms;
 
 neverallow {
@@ -317,7 +317,7 @@ neverallow {
   -dex2oat
   -zygote
   -otapreopt_slot
-  -xdns #增加此处
++ -xdns #增加此处
 } dalvikcache_data_file:dir no_w_dir_perms;
 
 neverallow {
@@ -326,10 +326,12 @@ neverallow {
   -system_app
   -init
   -installd # for relabelfrom and unlink, check for this in explicit neverallow
-  -xdns #增加此处
++ -xdns #增加此处
 } system_data_file:file no_w_file_perms;
 
-neverallow { domain -init -system_app #增加此处} default_prop:property_service set;
+neverallow { domain -init 
++ -system_app #增加此处
+} default_prop:property_service set;
 ```
 
 步骤四：打开android源码目录下的/system/sepolicy/app.te，修改如下内容：
@@ -341,7 +343,7 @@ neverallow {
   nfc
   radio
   shared_relro
-  #system_app #注释掉
+-  #system_app #注释掉
 } {
   data_file_type
   -dalvikcache_data_file
@@ -365,24 +367,24 @@ neverallow {
 
 ### 2 编写启动服务
 打开/system/core/rootdir/init.rc文件，在文件末尾加入如下内容：
-```
-service startxdns /system/bin/sh /system/bin/exxdnsproxy.sh start
-    class core
-    disabled
-    oneshot
-    seclabel u:r:xdns:s0
+```diff
++ service startxdns /system/bin/sh /system/bin/exxdnsproxy.sh start
++    class core
++    disabled
++    oneshot
++    seclabel u:r:xdns:s0
     
- service stopxdns /system/bin/sh /system/bin/exxdnsproxy.sh stop
-    class core
-    disabled
-    oneshot
-    seclabel u:r:xdns:s0
++ service stopxdns /system/bin/sh /system/bin/exxdnsproxy.sh stop
++    class core
++    disabled
++    oneshot
++    seclabel u:r:xdns:s0
 
- service checkxdns /system/bin/sh /system/bin/exxdnsproxy.sh check
-    class core
-    disabled
-    oneshot
-    seclabel u:r:xdns:s0
++ service checkxdns /system/bin/sh /system/bin/exxdnsproxy.sh check
++    class core
++    disabled
++    oneshot
++    seclabel u:r:xdns:s0
 ```
 
 ### 3 编写selinux规则te文件
@@ -393,14 +395,14 @@ service startxdns /system/bin/sh /system/bin/exxdnsproxy.sh start
 步骤三：将vendor/xdns.te放到android源码目录下的/system/sepolicy/vendor/下；
 
 步骤四：打开android源码目录下的/system/sepolicy/private/flie_contexts文件，在文件末尾加入如下内容：
-```
-/system/bin/xdnsproxy u:object_r:xdnsproxy_exec:s0
+```diff
++ /system/bin/xdnsproxy u:object_r:xdnsproxy_exec:s0
 
-/system/bin/xdns u:object_r:xdns_exec:s0
++ /system/bin/xdns u:object_r:xdns_exec:s0
 ```
 
 步骤五：打开android源码目录下的/system/sepolicy/private/domain.te，修改如下内容：
-```
+```diff
 # with other UIDs to these whitelisted domains.
 neverallow {
   domain
@@ -409,7 +411,7 @@ neverallow {
   -storaged
   -system_server
   userdebug_or_eng(`-perfprofd')
-  -xdns #增加此处
++ -xdns #增加此处
 } self:capability sys_ptrace;
 ```
 
@@ -422,7 +424,7 @@ neverallow {
   nfc
   radio
   shared_relro
-  -system_app #增加此处
++ -system_app #增加此处
 } {
   data_file_type
   -dalvikcache_data_file
@@ -430,13 +432,14 @@ neverallow {
   -apk_data_file
 }:file no_x_file_perms;
 
-neverallow { appdomain -platform_app -system_app # 增加此处}
+neverallow { appdomain -platform_app 
++ -system_app # 增加此处}
     apk_data_file:dir_file_class_set
     { create write setattr relabelfrom relabelto append unlink link rename };
 ```
 
 步骤七：打开android源码目录下的/system/sepolicy/public/domain.te，修改如下内容：
-```
+```diff 
 neverallow {
   domain
   -adbd
@@ -447,12 +450,12 @@ neverallow {
   -recovery
   -shell
   -system_server
-  -xdns #增加此处
++ -xdns #增加此处
 } serialno_prop:file r_file_perms;
 
 neverallow {
   domain
-  -xdns #增加此处
++ -xdns #增加此处
   -system_server
   -system_app
   -init
@@ -460,7 +463,9 @@ neverallow {
   with_asan(`-asan_extract')
 } system_data_file:file no_w_file_perms;
 
-neverallow { domain -init -system_app #增加此处} default_prop:property_service set;
+neverallow { domain -init 
++ -system_app #增加此处
+} default_prop:property_service set;
 ```
 
 步骤八：在源码根目录下，输入指令:"make -j4"进行模块编译，然后将此模块编译进入boot.img/system.img/vendor.img中。
