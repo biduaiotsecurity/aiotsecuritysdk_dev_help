@@ -16,13 +16,10 @@
 <div align=center><img src="https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/image/xdns%E7%9A%84%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86.png"/></div>
 <div align=center>xdns技术实现原理图</div>
 
-      * 首先，通过System app反射调用android.os.SystemProperties发送启动命令到init进程；
-
-      * 其次，init进程通过对启动命令分析init.rc存在的service进而通过shell脚本启动xdns；
-
-      * 最后，由xdns通过对shell脚本参数分析进行开启、关闭以及查询xdnsproxy状态，并且将结果回调到System app。
-
-      * 备注：System app为系统应用。
+首先，通过System app反射调用android.os.SystemProperties发送启动命令到init进程；
+其次，init进程通过对启动命令分析init.rc存在的service进而通过shell脚本启动xdns；
+最后，由xdns通过对shell脚本参数分析进行开启、关闭以及查询xdnsproxy状态，并且将结果回调到System app。
+|__备注：System app为系统应用。__|
 
 # 支持环境
 当前可以支持的环境：
@@ -30,7 +27,14 @@
 由于android4.3及以下版本由于内核SELinux模块缺失而不在此文档内容当中，需要适配android版本请联系我们。
 
 # 代码清单
-
+* Android环境
+    * xdns_Android4.X版本对应Android4.X版本
+    * xdns_Android5.X版本对应Android5.X版本
+    * xdns_Android6.X版本对应Android6.X版本
+    * xdns_Android7.X版本对应Android7.X版本
+    * xdns_Android8.X版本对应Android8.X版本
+* xdnste文件夹用于集成SELinux模块
+* xdnsbin文件夹用于集成init模块
 
 # 集成方式
 
@@ -44,21 +48,21 @@
 
 ### 2 编写启动服务
 打开/system/core/rootdir/init.rc文件，在文件末尾加入如下内容：
-```
-service startxdns /system/bin/sh /system/bin/exxdnsproxy.sh start
-    class core
-    disabled
-    oneshot 
+```diff
++ service startxdns /system/bin/sh /system/bin/exxdnsproxy.sh start
++     class core
++     disabled
++     oneshot 
     
- service stopxdns /system/bin/sh /system/bin/exxdnsproxy.sh stop
-    class core
-    disabled
-    oneshot
++ service stopxdns /system/bin/sh /system/bin/exxdnsproxy.sh stop
++     class core
++     disabled
++     oneshot
 
- service checkxdns /system/bin/sh /system/bin/exxdnsproxy.sh check
-    class core
-    disabled
-    oneshot
++ service checkxdns /system/bin/sh /system/bin/exxdnsproxy.sh check
++     class core
++     disabled
++     oneshot
 ```
 
 ### 3 编写selinux规则te文件
