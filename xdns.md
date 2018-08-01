@@ -3,6 +3,7 @@
 # 目录
 * [技术实现原理](#技术实现原理)
 * [支持环境](#支持环境)
+* [代码清单](#代码清单)
 * [集成方式](#集成方式)
     * [android4x版本集成方法](#android4x版本集成方法)
     * [android5x版本集成方法](#android5x版本集成方法)
@@ -15,18 +16,21 @@
 <div align=center><img src="https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/image/xdns%E7%9A%84%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86.png"/></div>
 <div align=center>xdns技术实现原理图</div>
 
-首先，通过System app反射调用android.os.SystemProperties发送启动命令到init进程；
+   首先，通过System app反射调用android.os.SystemProperties发送启动命令到init进程；
 
-其次，init进程通过对启动命令分析init.rc存在的service进而通过shell脚本启动xdns；
+   其次，init进程通过对启动命令分析init.rc存在的service进而通过shell脚本启动xdns；
 
-最后，由xdns通过对shell脚本参数分析进行开启、关闭以及查询xdnsproxy状态，并且将结果回调到System app。
+   最后，由xdns通过对shell脚本参数分析进行开启、关闭以及查询xdnsproxy状态，并且将结果回调到System app。
 
-备注：System app为系统应用。
+   备注：System app为系统应用。
 
 # 支持环境
 当前可以支持的环境：
 * Android环境 [4.4 - 8.0]
-由于android4.3及以下版本由于内核SELinux模块缺失而不在此文档内容当中，需要适配请联系我们。
+由于android4.3及以下版本由于内核SELinux模块缺失而不在此文档内容当中，需要适配android版本请联系我们。
+
+# 代码清单
+
 
 # 集成方式
 
