@@ -69,12 +69,12 @@
 步骤一：将exxdnsproxy.te、xdns.te以及xdnsproxy.te放到android源码目录下的/exrernal/sepolicy/下；
 
 步骤二：打开android源码目录下的/exrernal/sepolicy/flie_contexts文件，在文件末尾加入如下内容：
-```
-/system/bin/exxdnsproxy u:object_r:exxdnsproxy_exec:s0
+```diff
++ /system/bin/exxdnsproxy u:object_r:exxdnsproxy_exec:s0
 
-/system/bin/xdnsproxy u:object_r:xdnsproxy_exec:s0
++ /system/bin/xdnsproxy u:object_r:xdnsproxy_exec:s0
 
-/system/bin/xdns u:object_r:xdns_exec:s0
++ /system/bin/xdns u:object_r:xdns_exec:s0
 ```
 
 步骤三：在/exrernal/sepolicy/目录下，输入指令:"mm"进行模块编译，然后将此模块编译进入boot.img中。
@@ -93,20 +93,20 @@
 ### 2 编写启动服务
 打开/system/core/rootdir/init.rc文件，在文件末尾加入如下内容：
 ```
-service startxdns /system/bin/sh /system/bin/exxdnsproxy.sh start
-    class core
-    disabled
-    oneshot
++ service startxdns /system/bin/sh /system/bin/exxdnsproxy.sh start
++     class core
++     disabled
++     oneshot
     
- service stopxdns /system/bin/sh /system/bin/exxdnsproxy.sh stop
-    class core
-    disabled
-    oneshot
++ service stopxdns /system/bin/sh /system/bin/exxdnsproxy.sh stop
++     class core
++     disabled
++     oneshot
 
- service checkxdns /system/bin/sh /system/bin/exxdnsproxy.sh check
-    class core
-    disabled
-    oneshot
++ service checkxdns /system/bin/sh /system/bin/exxdnsproxy.sh check
++     class core
++     disabled
++     oneshot
 ```
 
 ### 3 编写selinux规则te文件
@@ -114,16 +114,16 @@ service startxdns /system/bin/sh /system/bin/exxdnsproxy.sh start
 
 步骤二：打开android源码目录下的/exrernal/sepolicy/flie_contexts文件，在文件末尾加入如下内容：
 ```
-/system/bin/exxdnsproxy u:object_r:exxdnsproxy_exec:s0
++ /system/bin/exxdnsproxy u:object_r:exxdnsproxy_exec:s0
 
-/system/bin/xdnsproxy u:object_r:xdnsproxy_exec:s0
++ /system/bin/xdnsproxy u:object_r:xdnsproxy_exec:s0
 
-/system/bin/xdns u:object_r:xdns_exec:s0
++ /system/bin/xdns u:object_r:xdns_exec:s0
 ```
 
 步骤三：打开android源码目录下的/exrernal/sepolicy/system_app.te，在文件末尾加入如下内容：
 ```
-allow system_app ctl_default_prop:property_service{set};
++ allow system_app ctl_default_prop:property_service{set};
 ```
 步骤四：在/exrernal/sepolicy/目录下，输入指令:"mm"进行模块编译，然后将此模块编译进入boot.img中。
 
@@ -140,38 +140,38 @@ allow system_app ctl_default_prop:property_service{set};
 
 ### 2 编写启动服务
 打开/system/core/rootdir/init.rc文件，在文件末尾加入如下内容：
-```
-service startxdns /system/bin/sh /system/bin/exxdnsproxy.sh start
-    class core
-    disabled
-    oneshot
-    seclabel u:r:xdns:s0
+```diff
++ service startxdns /system/bin/sh /system/bin/exxdnsproxy.sh start
++     class core
++     disabled
++     oneshot
++     seclabel u:r:xdns:s0
     
- service stopxdns /system/bin/sh /system/bin/exxdnsproxy.sh stop
-    class core
-    disabled
-    oneshot
-    seclabel u:r:xdns:s0
++ service stopxdns /system/bin/sh /system/bin/exxdnsproxy.sh stop
++     class core
++     disabled
++     oneshot
++     seclabel u:r:xdns:s0
 
- service checkxdns /system/bin/sh /system/bin/exxdnsproxy.sh check
-    class core
-    disabled
-    oneshot
-    seclabel u:r:xdns:s0
++ service checkxdns /system/bin/sh /system/bin/exxdnsproxy.sh check
++     class core
++     disabled
++     oneshot
++     seclabel u:r:xdns:s0
 ```
 
 ### 3 编写selinux规则te文件
 步骤一：将xdns.te以及xdnsproxy.te放到android源码目录下的/exrernal/sepolicy/下；
 
 步骤二：打开android源码目录下的/exrernal/sepolicy/flie_contexts文件，在文件末尾加入如下内容：
-```
-/system/bin/xdnsproxy u:object_r:xdnsproxy_exec:s0
+```diff
++ /system/bin/xdnsproxy u:object_r:xdnsproxy_exec:s0
 
-/system/bin/xdns u:object_r:xdns_exec:s0
++ /system/bin/xdns u:object_r:xdns_exec:s0
 ```
 
 步骤三：打开android源码目录下的/exrernal/sepolicy/domain.te，修改如下内容：
-```
+```diff
 neverallow {
   domain
   -debuggerd
@@ -180,7 +180,7 @@ neverallow {
   -system_server
   userdebug_or_eng(`-procrank')
   userdebug_or_eng(`-perfprofd')
-  -xdns #增加此处
++ -xdns #增加此处
 } self:capability sys_ptrace;
 
 neverallow {
@@ -191,7 +191,7 @@ neverallow {
   userdebug_or_eng(`-su')
   -system_server
   -zygote
-  -xdns #增加此处
++ -xdns #增加此处
 } { file_type -system_file -exec_type }:file execute;
 
 neverallow {
@@ -200,7 +200,7 @@ neverallow {
   -zygote
   -installd
   -dex2oat
-  -xdns #增加此处
++ -xdns #增加此处
 } dalvikcache_data_file:file no_w_file_perms;
 
 neverallow {
