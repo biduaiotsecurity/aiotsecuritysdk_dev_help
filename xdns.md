@@ -335,7 +335,7 @@ neverallow { domain -init
 ```
 
 步骤四：打开android源码目录下的/system/sepolicy/app.te，修改如下内容：
-```
+```diff
 # Blacklist app domains not allowed to execute from /data
 neverallow {
   bluetooth
