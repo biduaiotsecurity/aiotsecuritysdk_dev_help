@@ -1,13 +1,14 @@
-# xdns接入文档
+# xdns反DNS劫持方案集成文档
 
 # 目录
 * [技术实现原理](#技术实现原理)
-* [android4x版本集成方法](#android4x版本集成方法)
-* [android5x版本集成方法](#android5x版本集成方法)
-* [android6x版本集成方法](#android6x版本集成方法)
-* [android7x版本集成方法](#android7x版本集成方法)
-* [android8x版本集成方法](#android8x版本集成方法)
-
+* [支持环境](#支持环境)
+* 集成方式
+    * [android4x版本集成方法](#android4x版本集成方法)
+    * [android5x版本集成方法](#android5x版本集成方法)
+    * [android6x版本集成方法](#android6x版本集成方法)
+    * [android7x版本集成方法](#android7x版本集成方法)
+    * [android8x版本集成方法](#android8x版本集成方法)
 
 ## 技术实现原理
 
@@ -21,6 +22,13 @@
 最后，由xdns通过对shell脚本参数分析进行开启、关闭以及查询xdnsproxy状态，并且将结果回调到System app。
 
 备注：System app为系统应用。
+
+## 支持环境
+当前可以支持的环境：
+* Android环境 [4.4 - 8.0]
+由于android4.3及以下版本由于内核SELinux模块缺失而不在此文档内容当中，需要适配请联系我们。
+
+## 集成方式
 
 ## Android4.X版本集成方法
 ### 1 添加执行脚本exxdnsproxy.sh、xdns以及xdnsproxy到/system/bin/目录
@@ -36,7 +44,7 @@
 service startxdns /system/bin/sh /system/bin/exxdnsproxy.sh start
     class core
     disabled
-    oneshot
+    oneshot 
     
  service stopxdns /system/bin/sh /system/bin/exxdnsproxy.sh stop
     class core
