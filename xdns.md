@@ -221,7 +221,9 @@ neverallow {
   -installd # for relabelfrom and unlink, check for this in explicit neverallow
 } system_data_file:file no_w_file_perms;
 
-neverallow { domain -init + -system_app #增加此处} default_prop:property_service set;
+neverallow { domain -init 
++ -system_app #增加此处
+} default_prop:property_service set;
 
 ```
 
