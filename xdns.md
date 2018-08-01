@@ -92,7 +92,7 @@
 
 ### 2 编写启动服务
 打开/system/core/rootdir/init.rc文件，在文件末尾加入如下内容：
-```
+```diff
 + service startxdns /system/bin/sh /system/bin/exxdnsproxy.sh start
 +     class core
 +     disabled
@@ -113,7 +113,7 @@
 步骤一：将exxdnsproxy.te、xdns.te以及xdnsproxy.te放到android源码目录下的/exrernal/sepolicy/下；
 
 步骤二：打开android源码目录下的/exrernal/sepolicy/flie_contexts文件，在文件末尾加入如下内容：
-```
+```diff
 + /system/bin/exxdnsproxy u:object_r:exxdnsproxy_exec:s0
 
 + /system/bin/xdnsproxy u:object_r:xdnsproxy_exec:s0
@@ -122,7 +122,7 @@
 ```
 
 步骤三：打开android源码目录下的/exrernal/sepolicy/system_app.te，在文件末尾加入如下内容：
-```
+```diff
 + allow system_app ctl_default_prop:property_service{set};
 ```
 步骤四：在/exrernal/sepolicy/目录下，输入指令:"mm"进行模块编译，然后将此模块编译进入boot.img中。
@@ -209,7 +209,7 @@ neverallow {
   -installd
   -dex2oat
   -zygote
-  -xdns #增加此处
++ -xdns #增加此处
 } dalvikcache_data_file:dir no_w_dir_perms;
 
 neverallow {
@@ -217,11 +217,11 @@ neverallow {
   -system_server
   -system_app
   -init
-  -xdns #增加此处
++ -xdns #增加此处
   -installd # for relabelfrom and unlink, check for this in explicit neverallow
 } system_data_file:file no_w_file_perms;
 
-neverallow { domain -init -system_app #增加此处} default_prop:property_service set;
+neverallow { domain -init + -system_app #增加此处} default_prop:property_service set;
 
 ```
 
