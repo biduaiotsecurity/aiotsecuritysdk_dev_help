@@ -343,7 +343,7 @@ neverallow {
   nfc
   radio
   shared_relro
--  #system_app #注释掉
+-  #system_app 
 } {
   data_file_type
   -dalvikcache_data_file
