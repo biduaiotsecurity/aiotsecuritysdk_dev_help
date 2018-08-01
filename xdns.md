@@ -180,7 +180,7 @@ neverallow {
   -system_server
   userdebug_or_eng(`-procrank')
   userdebug_or_eng(`-perfprofd')
-+ -xdns #增加此处
++ -xdns 
 } self:capability sys_ptrace;
 
 neverallow {
@@ -191,7 +191,7 @@ neverallow {
   userdebug_or_eng(`-su')
   -system_server
   -zygote
-+ -xdns #增加此处
++ -xdns 
 } { file_type -system_file -exec_type }:file execute;
 
 neverallow {
@@ -200,7 +200,7 @@ neverallow {
   -zygote
   -installd
   -dex2oat
-+ -xdns #增加此处
++ -xdns 
 } dalvikcache_data_file:file no_w_file_perms;
 
 neverallow {
@@ -209,7 +209,7 @@ neverallow {
   -installd
   -dex2oat
   -zygote
-+ -xdns #增加此处
++ -xdns 
 } dalvikcache_data_file:dir no_w_dir_perms;
 
 neverallow {
@@ -217,12 +217,12 @@ neverallow {
   -system_server
   -system_app
   -init
-+ -xdns #增加此处
++ -xdns 
   -installd # for relabelfrom and unlink, check for this in explicit neverallow
 } system_data_file:file no_w_file_perms;
 
 neverallow { domain -init 
-+ -system_app #增加此处
++ -system_app 
 } default_prop:property_service set;
 
 ```
@@ -280,7 +280,7 @@ neverallow {
   -vold
   -dumpstate
   -system_server
-+  -xdns #增加此处
++  -xdns 
   userdebug_or_eng(`-perfprofd')
 } self:capability sys_ptrace;
 
@@ -293,7 +293,7 @@ neverallow {
   userdebug_or_eng(`-su')
   -system_server
   -zygote
-+  -xdns #增加此处
++  -xdns 
 } { file_type -system_file -exec_type -postinstall_file }:file execute
 
 neverallow {
@@ -305,7 +305,7 @@ neverallow {
   -cppreopts
   -dex2oat
   -otapreopt_slot
-+ -xdns #增加此处
++ -xdns 
 } dalvikcache_data_file:file no_w_file_perms;
 
 neverallow {
@@ -317,7 +317,7 @@ neverallow {
   -dex2oat
   -zygote
   -otapreopt_slot
-+ -xdns #增加此处
++ -xdns 
 } dalvikcache_data_file:dir no_w_dir_perms;
 
 neverallow {
@@ -326,11 +326,11 @@ neverallow {
   -system_app
   -init
   -installd # for relabelfrom and unlink, check for this in explicit neverallow
-+ -xdns #增加此处
++ -xdns 
 } system_data_file:file no_w_file_perms;
 
 neverallow { domain -init 
-+ -system_app #增加此处
++ -system_app 
 } default_prop:property_service set;
 ```
 
@@ -411,7 +411,7 @@ neverallow {
   -storaged
   -system_server
   userdebug_or_eng(`-perfprofd')
-+ -xdns #增加此处
++ -xdns 
 } self:capability sys_ptrace;
 ```
 
@@ -424,7 +424,7 @@ neverallow {
   nfc
   radio
   shared_relro
-+ -system_app #增加此处
++ -system_app 
 } {
   data_file_type
   -dalvikcache_data_file
@@ -450,12 +450,12 @@ neverallow {
   -recovery
   -shell
   -system_server
-+ -xdns #增加此处
++ -xdns 
 } serialno_prop:file r_file_perms;
 
 neverallow {
   domain
-+ -xdns #增加此处
++ -xdns 
   -system_server
   -system_app
   -init
@@ -464,7 +464,7 @@ neverallow {
 } system_data_file:file no_w_file_perms;
 
 neverallow { domain -init 
-+ -system_app #增加此处
++ -system_app 
 } default_prop:property_service set;
 ```
 
