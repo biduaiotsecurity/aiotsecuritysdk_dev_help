@@ -465,15 +465,15 @@ neverallow { domain -init
 步骤八：在源码根目录下，输入指令:"make -j4"进行模块编译，然后将此模块编译进入boot.img/system.img/vendor.img中。
 
 # 应用层启动方式
-若以app方式集成，app检测到dns风险后将自动启动xdns反dns劫持功能。
-若以SDK方式集成，请查阅链接中的调用与回调方法：https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/index.md
-关键性接口与回调：
-```
-public static boolean fixDns()
+* 若以app方式集成，app检测到dns风险后将自动启动xdns反dns劫持功能。
+* 若以SDK方式集成，请查阅链接中的调用与回调方法：https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/index.md
+    * 关键性接口与回调：
+    ```
+    public static boolean fixDns()
 
-public static boolean stopDns()
+    public static boolean stopDns()
 
-public static boolean checkDnsStatus()
+    public static boolean checkDnsStatus()
 
-public void onDnsBehaviourResult(String behaviour, boolean suc)
-```
+    public void onDnsBehaviourResult(String behaviour, boolean suc)
+    ```
