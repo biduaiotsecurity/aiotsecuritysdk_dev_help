@@ -10,7 +10,7 @@
     * [android6x版本集成方法](#android6x版本集成方法)
     * [android7x版本集成方法](#android7x版本集成方法)
     * [android8x版本集成方法](#android8x版本集成方法)
-
+* [应用层启动方式](#应用层启动方式)
 # 技术实现原理
 
 <div align=center><img src="https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/image/xdns%E7%9A%84%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86.png"/></div>
@@ -130,9 +130,6 @@ __备注：System app为系统应用。__
 ```
 步骤四：在/exrernal/sepolicy/目录下，输入指令:"mm"进行模块编译，然后将此模块编译进入boot.img中。
 
-### 4 如何启动、关闭以及查询xdns
-请查阅链接中的调用方法：https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/index.md
-
 ## Android6.X版本集成方法
 ### 1 添加执行脚本exxdnsproxy.sh、xdns以及xdnsproxy到/system/bin/目录
 步骤一：在android源码目录下的/system/core/rootdir/下新建xdns目录；
@@ -231,9 +228,6 @@ neverallow { domain -init
 ```
 
 步骤四：在源码根目录下，输入指令:"makebootimage"进行模块编译，然后将此模块编译进入boot.img中。
-
-### 4 如何启动、关闭以及查询xdns
-请查阅链接中的调用方法：https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/index.md
 
 ## Android7.X版本集成方法
 ### 1 添加执行脚本exxdnsproxy.sh、xdns以及xdnsproxy到/system/bin/目录
@@ -357,9 +351,6 @@ neverallow {
 
 步骤五：在源码根目录下，输入指令:"makebootimage"进行模块编译，然后将此模块编译进入boot.img中。
 
-### 4 如何启动、关闭以及查询xdns
-请查阅链接中的调用方法：https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/index.md
-
 ## Android8.X版本集成方法
 ### 1 添加执行脚本exxdnsproxy.sh、xdns以及xdnsproxy到/system/bin/目录
 步骤一：在android源码目录下的/system/core/rootdir/下新建xdns目录；
@@ -473,5 +464,5 @@ neverallow { domain -init
 
 步骤八：在源码根目录下，输入指令:"make -j4"进行模块编译，然后将此模块编译进入boot.img/system.img/vendor.img中。
 
-### 4 如何启动、关闭以及查询xdns
+# 应用层启动方式
 请查阅链接中的调用方法：https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/index.md
