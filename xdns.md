@@ -82,9 +82,6 @@ __备注：System app为系统应用。__
 
 步骤三：在/exrernal/sepolicy/目录下，输入指令:"mm"进行模块编译，然后将此模块编译进入boot.img中。
 
-### 4 如何启动、关闭以及查询xdns
-请查阅链接中的调用方法：https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/index.md
-
 ## Android5.X版本集成方法
 ### 1 添加执行脚本exxdnsproxy.sh、xdns以及xdnsproxy到/system/bin/目录
 步骤一：在android源码目录下的/system/core/rootdir/下新建xdns目录；
