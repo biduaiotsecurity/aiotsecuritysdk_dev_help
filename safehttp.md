@@ -86,6 +86,11 @@ LOCAL_MODULE_TAGS := optional
 include $(BUILD_MULTI_PREBUILT)
 
 include $(CLEAR_VARS)
+$(shell cp -rf $(LOCAL_PATH)/jniLibs/arm/libmesalink-jni.so $(TARGET_OUT)/../obj/lib/)
+###### 如果是64位系统，注释掉上面这行并添加以下几行 #####
+#$(shell cp -rf $(LOCAL_PATH)/jniLibs/arm/libmesalink-jni.so $(TARGET_OUT)/../obj_arm/lib/)
+#$(shell cp -rf $(LOCAL_PATH)/jniLibs/arm64/libmesalink-jni.so $(TARGET_OUT)/../obj/lib/)
+##### end #####
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := libmesalink-jni
 LOCAL_MODULE_SUFFIX := .so
