@@ -13,7 +13,7 @@ repositories {
 
 dependencies {
     compile(name: 'tvsafe-release-vxxx', ext: 'aar')
-    compile(name: 'libccb-release-vxxx', ext: 'aar')
+   
 
 	// 如果项目中已集成过gson，可以忽略
     compile 'com.google.code.gson:gson:2.8.0'
