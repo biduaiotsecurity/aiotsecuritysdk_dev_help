@@ -4,6 +4,8 @@
 ## SDK功能
 SDK的功能包含SSL防护（MesaLink）与DNS防护（HttpDNS）
 
+MesaLink提供了一个Android平台上更安全高效的SSL实现，并支持双向认证
+
 SDK中的DNS防护功能包含两种，一种只能覆盖HTTPS连接的DNS请求，另外一种能够覆盖所有HTTP连接的DNS请求
 
 SDK的接入方式有两种，一种是集成到APP当中，可以解决接入APP的SSL安全和DNS安全；另一种方式是集成到Android Framework当中，可以解决整个Android系统，以及所有APP的SSL安全和DNS安全。
