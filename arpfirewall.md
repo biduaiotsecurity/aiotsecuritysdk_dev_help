@@ -28,6 +28,7 @@ __备注：System app为系统应用。__
 
 ## Linux技术原理
    直接通过ELF文件的方式启动。
+
 __备注：arpfirewall以root权限启动。__
 
 # 支持环境
