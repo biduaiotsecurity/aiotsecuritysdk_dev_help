@@ -48,4 +48,6 @@ __备注：System app为系统应用。__
 
 # 集成方式
 
-## Android4.X版本集成方方法
+## android版本集成
+
+### Android4.X版本集成方方法
