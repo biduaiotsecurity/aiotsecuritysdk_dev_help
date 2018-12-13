@@ -11,6 +11,8 @@
         * [android7x版本集成方法](#android7x版本集成方法)
         * [android8x版本集成方法](#android8x版本集成方法)
 * [应用层启动方式](#应用层启动方式)
+   * [android启动方式](#android启动方式)
+   * [Linux启动方式](#Linux启动方式)
 # 技术实现原理
 
 <div align=center><img src="https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/image/arpfirewall%E9%98%B2%E7%81%AB%E5%A2%99%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86.png"/></div>
@@ -115,7 +117,7 @@ __备注：System app为系统应用。__
 
 步骤二：打开android源码目录下的/exrernal/sepolicy/flie_contexts文件，在文件末尾加入如下内容：
 ```diff
-+ /system/bin/xdnsproxy u:object_r:将arpfirewall_exec:s0
++ /system/bin/arpfirewall u:object_r:arpfirewall_exec:s0
 ```
 
 步骤三：打开android源码目录下的/exrernal/sepolicy/domain.te，修改如下内容：
@@ -185,7 +187,7 @@ neverallow { domain -init
 
 步骤二：打开android源码目录下的device/XXX/XXX/sepolicy/flie_contexts文件，在文件末尾加入如下内容：
 ```diff
-+ /system/bin/arpfirewall u:object_r:xdnsproxy_exec:s0
++ /system/bin/arpfirewall u:object_r:arpfirewall_exec:s0
 ```
 
 步骤三：打开android源码目录下的/system/sepolicy/domain.te，修改如下内容：
@@ -291,7 +293,7 @@ neverallow {
 
 步骤四：打开android源码目录下的/system/sepolicy/private/flie_contexts文件，在文件末尾加入如下内容：
 ```diff
-+ /system/bin/arpfirewall u:object_r:xdns_exec:s0
++ /system/bin/arpfirewall u:object_r:arpfirewall_exec:s0
 ```
 
 步骤五：打开android源码目录下的/system/sepolicy/private/domain.te，修改如下内容：
@@ -352,6 +354,7 @@ neverallow { domain -init
 步骤八：在源码根目录下，输入指令:"make -j4"进行模块编译，然后将此模块编译进入boot.img/system.img/vendor.img中。
 
 # 应用层启动方式
+## android启动方式
 * 若以app方式集成，app检测到arp劫持风险后将自动启动arpfirewall防火墙功能。
 * 若以SDK方式集成，请查阅链接中的调用与回调方法：https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/index.md
     * 关键性接口与回调：
@@ -364,3 +367,9 @@ neverallow { domain -init
 
     public void onArpFirewallResult(String behaviour, boolean suc)
     ```
+## Linux启动方式
+   * 启动
+   arpfirewall -o start
+   * 停止
+   arpfirewall -o stop
+   
