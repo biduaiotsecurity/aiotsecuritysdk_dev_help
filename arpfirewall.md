@@ -6,7 +6,7 @@
 * [代码清单](#代码清单)
 * [集成方式](#集成方式)
     * [android版本集成](#android版本集成)
-        * [android4x版本集成方法](#android4x版本集成方法)
+        * [android4x与android5x版本集成方法](#android4x与android5x版本集成方法)
         * [android5x版本集成方法](#android5x版本集成方法)
         * [android6x版本集成方法](#android6x版本集成方法)
         * [android7x版本集成方法](#android7x版本集成方法)
@@ -49,5 +49,73 @@ __备注：System app为系统应用。__
 # 集成方式
 
 ## android版本集成
+####  1 添加执行脚本exarpfirewall.sh和arpfirewall到/system/bin/目录
+步骤一：在android源码目录下的/system/core/rootdir/下新建arpfirewall目录；
 
-### Android4.X版本集成方方法
+步骤二：将Android.mk、exarpfirewall.sh以及arpfirewall放到此目录system/core/rootdir/arpfirewall/下；
+
+步骤三：在system/core/rootdir/arpfirewall/目录下，输入指令:"mm"进行模块编译，然后将此模块编译进入system.img中。
+
+### Android4.x与Android5.x版本集成方法
+#### 1 编写启动服务
+打开/system/core/rootdir/init.rc文件，在文件末尾加入如下内容：
+```diff
++ service startarpfirewall /system/bin/sh /system/bin/exarpfirewall.sh start
++     class core
++     disabled
++     oneshot 
+    
++ service stoparpfirewall /system/bin/sh /system/bin/exarpfirewall.sh stop
++     class core
++     disabled
++     oneshot
+
++ service checkarpfirewall /system/bin/sh /system/bin/exarpfirewall.sh check
++     class core
++     disabled
++     oneshot
+```
+
+#### 2 编写启动服务
+步骤一：将exarpfirewall.te和arpfirewall.te放到android源码目录下的/exrernal/sepolicy/下；
+
+步骤二：打开android源码目录下的/exrernal/sepolicy/flie_contexts文件，在文件末尾加入如下内容：
+```diff
++ /system/bin/exarpfirewall u:object_r:exarpfirewall_exec:s0
+
++ /system/bin/arpfirewall u:object_r:arpfirewall_exec:s0
+```
+
+步骤三：在/exrernal/sepolicy/目录下，输入指令:"mm"进行模块编译，然后将此模块编译进入boot.img中。
+
+### Android6.X版本集成方法
+#### 1 编写启动服务
+打开/system/core/rootdir/init.rc文件，在文件末尾加入如下内容：
+```diff
++ service startarpfirewall /system/bin/sh /system/bin/exarpfirewall.sh start
++     class core
++     disabled
++     oneshot
++     seclabel u:r:arpfirewall:s0
+    
++ service stoparpfirewall /system/bin/sh /system/bin/exarpfirewall.sh stop
++     class core
++     disabled
++     oneshot
++     seclabel u:r:arpfirewall:s0
+
++ service checkarpfirewall /system/bin/sh /system/bin/exarpfirewall.sh check
++     class core
++     disabled
++     oneshot
++     seclabel u:r:arpfirewall:s0
+```
+
+### 2 编写selinux规则te文件
+步骤一：将arpfirewall.te放到android源码目录下的/exrernal/sepolicy/下；
+
+步骤二：打开android源码目录下的/exrernal/sepolicy/flie_contexts文件，在文件末尾加入如下内容：
+```diff
++ /system/bin/xdnsproxy u:object_r:将arpfirewall_exec:s0
+```
+
