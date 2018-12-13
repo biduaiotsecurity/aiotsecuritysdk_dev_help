@@ -161,6 +161,33 @@ public class TVSafe {
      * @return true 成功
      */
     public static boolean start(String pkgName, String param)
+    
+    /**
+     * arp修复
+     * 使用该接口，有两个要求。
+     * 1 必须得有系统权限。
+     * 2 必须同时集成arpfirewall
+     * arpfirewall文档：https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/arpfirewall.md
+     * */
+     public static boolean startArpFirewall()
+     
+    /**
+     * 停止arp修复
+     * 使用该接口，有两个要求。
+     * 1 必须得有系统权限。
+     * 2 必须同时集成arpfirewall
+     * arpfirewall文档：https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/arpfirewall.md
+     * */
+     public static boolean stopArpFirewall()
+     
+    /**
+     * 查询arp修复状态
+     * 使用该接口，有两个要求。
+     * 1 必须得有系统权限。
+     * 2 必须同时集成arpfirewall
+     * arpfirewall文档：https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/arpfirewall.md
+     */
+     public static boolean checkArpFirewall()
 }
 ```
 
@@ -227,6 +254,38 @@ public class MyResultService extends DefaultResultService {
     public void onInitialized(boolean b) {
     	// 在这里之前，可以一直转Loading...
         Log.i("onInitialized", "onInitialized");
+    }
+    
+    // 用于arp修复、停止、检测状态回调
+    @Override
+    public void onArpFirewallResult(String behaviour, boolean suc) {
+        String resultTmp = "";
+        String operateTmp = "";
+        switch (behaviour) {
+            case ARP_START_BEHAVIOUR:
+                operateTmp = "启动ARP防火墙";
+                resultTmp = suc ? "成功" : "失败";
+                break;
+            case ARP_STOP_BEHAVIOUR:
+                operateTmp = "停止ARP防火墙";
+                resultTmp = suc ? "成功" : "失败";
+                break;
+            case ARP_CHECK_BEHAVIOUR:
+                operateTmp = "ARP防火墙状态";
+                resultTmp = suc ? "开启" : "关闭";
+                break;
+            default:
+                break;
+        }
+        final String operate = operateTmp;
+        final String result = resultTmp;
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MyResultService.this, operate + result, Toast.LENGTH_LONG).show();
+            }
+        });
+        Log.i("onArpFirewallResult", "onArpFirewallResult " + behaviour + " " + (suc ? "true" : "false"));
     }
 }
 ```
@@ -467,4 +526,23 @@ dns修复、停止、检测状态回调
 
 ```
 
+### onArpFirewallResult
+arp修复、停止、检测状态回调
+```html
+/**
+* 启动修复arp成功
+*/
+12-13 17:56:19.839 24898-26852/? I/onArpFirewallResult: arp_start_behaviour true
+
+/**
+* 停止修复arp成功
+*/
+12-13 17:56:29.439 24898-26916/? I/onArpFirewallResult: arp_stop_behaviour true
+
+/**
+* 查询修复arp状态为启动
+*/
+12-13 17:56:24.589 24898-26883/? I/tonArpFirewallResult: arp_check_behaviour true
+
+```
 
