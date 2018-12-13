@@ -14,7 +14,7 @@
    * [android启动方式](#android启动方式)
    * [Linux启动方式](#Linux启动方式)
 # 技术实现原理
-
+## android技术原理
 <div align=center><img src="https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/image/arpfirewall%E9%98%B2%E7%81%AB%E5%A2%99%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86.png"/></div>
 <div align=center>arpfirewall技术实现原理图</div>
 
@@ -25,6 +25,10 @@
 最后，由arpfirewall通过对shell脚本参数分析进行开启、关闭以及查询arp防火墙状态，并且将结果回调到System app。
 
 __备注：System app为系统应用。__
+
+## Linux技术原理
+   直接通过ELF文件的方式启动。
+__备注：arpfirewall以root权限启动。__
 
 # 支持环境
 当前可以支持的环境：
