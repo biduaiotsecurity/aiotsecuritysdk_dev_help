@@ -5,11 +5,12 @@
 * [支持环境](#支持环境)
 * [代码清单](#代码清单)
 * [集成方式](#集成方式)
-    * [android4x版本集成方法](#android4x版本集成方法)
-    * [android5x版本集成方法](#android5x版本集成方法)
-    * [android6x版本集成方法](#android6x版本集成方法)
-    * [android7x版本集成方法](#android7x版本集成方法)
-    * [android8x版本集成方法](#android8x版本集成方法)
+    * [android版本集成](#android版本集成)
+        * [android4x版本集成方法](#android4x版本集成方法)
+        * [android5x版本集成方法](#android5x版本集成方法)
+        * [android6x版本集成方法](#android6x版本集成方法)
+        * [android7x版本集成方法](#android7x版本集成方法)
+        * [android8x版本集成方法](#android8x版本集成方法)
 * [应用层启动方式](#应用层启动方式)
 # 技术实现原理
 
@@ -18,9 +19,9 @@
 
 首先，通过System app反射调用android.os.SystemProperties发送启动命令到init进程；
 
-其次，init进程通过对启动命令分析init.rc存在的service进而通过shell脚本启动xdns；
+其次，init进程通过对启动命令分析init.rc存在的service进而通过shell脚本启动arpfirewall；
 
-最后，由xdns通过对shell脚本参数分析进行开启、关闭以及查询xdnsproxy状态，并且将结果回调到System app。
+最后，由arpfirewall通过对shell脚本参数分析进行开启、关闭以及查询arp防火墙状态，并且将结果回调到System app。
 
 __备注：System app为系统应用。__
 
@@ -34,7 +35,17 @@ __备注：System app为系统应用。__
 
 # 代码清单
 * Android环境
-
+    * arpfirewall_Android4.X版本对应Android4.X版本
+    * arpfirewall_Android5.X版本对应Android5.X版本
+    * arpfirewall_Android6.X版本对应Android6.X版本
+    * arpfirewall_Android7.X版本对应Android7.X版本
+    * arpfirewall_Android8.X版本对应Android8.X版本
+* arpfirewallte文件夹用于集成SELinux模块
+* arpfirewallbin文件夹用于集成init模块
 
 * Linux环境
    * 单独存在一个ELF文件，可自行调用。
+
+# 集成方式
+
+## Android4.X版本集成方方法
