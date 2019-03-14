@@ -118,10 +118,18 @@ public class TVSafe {
 
     /**
      * 静默网络扫描模块
-     *
+     * 注意，此方法不能与startDnsDetect()一起调，根据自己业务情况二选其1
      * @return true 成功
      */
     public static boolean startNetScanner()
+    
+    
+    /**
+     * 静默dns检测（如果有特殊的dns需要检测，请携带自己的包名告知我们，我们配置添加新的dns检测）
+     * 注意，此方法不能与startNetScanner()一起调，根据自己业务情况二选其1
+     * @return true 成功
+     */
+    public static boolean startDnsDetect()
 
     /**
      * dns修复
@@ -196,6 +204,14 @@ public class TVSafe {
 需要自己建立一个service，继承自`DefaultResultService `。
 ```
 public class MyResultService extends DefaultResultService {
+
+    //dns检测结果回调， true代表没问题，false代表dns异常
+    @Override
+    public void onDnsDetectResult(boolean b) {
+        Log.i("tvsafe", "onDnsDetectResult");
+        Log.i("onAvpScanResult", "dns result: " + String.valueOf(b));
+    }
+    
     //病毒扫描回调
     @Override
     public void onAvpScanResult(List<AvpScanResult> list) {
