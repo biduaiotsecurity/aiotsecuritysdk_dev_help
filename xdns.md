@@ -37,6 +37,7 @@ __备注：System app为系统应用。__
     * xdns_Android6.X版本对应Android6.X版本
     * xdns_Android7.X版本对应Android7.X版本
     * xdns_Android8.X版本对应Android8.X版本
+    * xdns_Android9.X版本对应Android9.X版本
 * xdnste文件夹用于集成SELinux模块
 * xdnsbin文件夹用于集成init模块
 
