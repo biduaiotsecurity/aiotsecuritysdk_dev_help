@@ -478,41 +478,23 @@ neverallow { domain -init
 打开/system/core/rootdir/init.rc文件，在文件末尾加入如下内容：
 
 ```diff
++ service startxdns /system/bin/sh /system/bin/exxdnsproxy.sh start
++    class core
++    disabled
++    oneshot
++    seclabel u:r:xdns:s0
+    
++ service stopxdns /system/bin/sh /system/bin/exxdnsproxy.sh stop
++    class core
++    disabled
++    oneshot
++    seclabel u:r:xdns:s0
 
-\+ service startxdns /system/bin/sh /system/bin/exxdnsproxy.sh start
-
-\+    class core
-
-\+    disabled
-
-\+    oneshot
-
-\+    seclabel u:r:xdns:s0
-
-​    
-
-\+ service stopxdns /system/bin/sh /system/bin/exxdnsproxy.sh stop
-
-\+    class core
-
-\+    disabled
-
-\+    oneshot
-
-\+    seclabel u:r:xdns:s0
-
-
-
-\+ service checkxdns /system/bin/sh /system/bin/exxdnsproxy.sh check
-
-\+    class core
-
-\+    disabled
-
-\+    oneshot
-
-\+    seclabel u:r:xdns:s0
-
++ service checkxdns /system/bin/sh /system/bin/exxdnsproxy.sh check
++    class core
++    disabled
++    oneshot
++    seclabel u:r:xdns:s0
 ```
 
 
@@ -529,11 +511,8 @@ neverallow { domain -init
 
 ```diff
 
-\+ /system/bin/xdnsproxy u:object_r:xdns_exec:s0
-
-
-
-\+ /system/bin/xdns u:object_r:xdns_exec:s0
++ /system/bin/xdnsproxy u:object_r:xdns_exec:s0
++ /system/bin/xdns u:object_r:xdns_exec:s0
 
 ```
 
@@ -542,13 +521,9 @@ neverallow { domain -init
 ```diff
 
    userdebug_or_eng(`-incidentd')
-
    -storaged
-
    -system_server
-
-\+ -xdns
-
++ -xdns
    userdebug_or_eng(`-perfprofd')
 
  } self:global_capability_class_set sys_ptrace;
@@ -557,11 +532,10 @@ neverallow { domain -init
 
 
 
-​     -init
-​     -ueventd
-​     -vold
-
-\+ -xdns
+     -init
+     -ueventd
+     -vold
++    -xdns
 } sysfs:file no_rw_file_perms;
 
 ```
@@ -596,7 +570,7 @@ neverallow { domain -init
    -system_server
    -vendor_init
 
-\+ -xdns
++ -xdns
 } serialno_prop:file r_file_perms;
 
 
@@ -605,9 +579,9 @@ neverallow { domain -init
          -vendor_executes_system_violators
          -vendor_init
 
-\+ -xdns
++ -xdns
 
-\+ -xdnsproxy
++ -xdnsproxy
 } {
     exec_type
     -vendor_file_type
@@ -620,7 +594,7 @@ neverallow { domain -init
    -installd # for relabelfrom and unlink, check for this in explicit neverallow
    -vold_prepare_subdirs # For unlink
 
-\+ -xdns
++  -xdns
 with_asan(`-asan_extract')
  } system_data_file:file no_w_file_perms;
 
@@ -632,7 +606,7 @@ with_asan(`-asan_extract')
    -vold_prepare_subdirs
    -zygote
 
-\+ -xdns
++  -xdns
 } self:capability dac_override;
  neverallow { domain -traced_probes } self:capability dac_read_search;
 
@@ -695,21 +669,16 @@ net_domain(system_app)
 
 ```diff 
 
-​     wpantund_exec
-​     wpantund_service
-​     wpantund_tmpfs
+	wpantund_exec
+	wpantund_service
+	wpantund_tmpfs
 
-\+   xdns
-
-\+   xdns_exec
-
-\+   xdns_tmpfs
-
-\+	xdnsproxy
-
-\+	xdnsproxy_exec
-
-\+	xdnsproxy_tmpfs
++	xdns
++	xdns_exec
++	xdns_tmpfs
++	xdnsproxy
++	xdnsproxy_exec
++	xdnsproxy_tmpfs
 wm_trace_data_file))
 
 ```
@@ -720,22 +689,17 @@ wm_trace_data_file))
 
 ```diff 
 
-​	 wpantund
-​     wpantund_exec
-​     wpantund_service
+​	wpantund
+​	wpantund_exec
+​	wpantund_service
 
-\+   xdns
-
-\+   xdns_exec
-
-\+   xdns_tmpfs
-
-\+	xdnsproxy
-
-\+	xdnsproxy_exec
-
-\+	xdnsproxy_tmpfs
-	  wpantund_tmpfs))
++	xdns
++	xdns_exec
++	xdns_tmpfs
++	xdnsproxy
++	xdnsproxy_exec
++	xdnsproxy_tmpfs
+	wpantund_tmpfs))
 
 ```
 
@@ -747,12 +711,10 @@ ret += "\"coredomain\" attribute because they are executed off of "
          ret += "/system:\n"
          ret += " ".join(str(x) for x in sorted(violators)) + "\n"
 
-\+ return ret
++ return ret
 
-\#verify that all domains launched form /vendor do not have the coredomain
-
-\#attribute
-
+#verify that all domains launched form /vendor do not have the coredomain
+#attribute
 violators = []
 
 ```
