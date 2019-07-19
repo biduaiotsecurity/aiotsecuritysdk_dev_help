@@ -583,13 +583,10 @@ neverallow { domain -init
 } serialno_prop:file r_file_perms;
 
 
-
- -appdomain
-         -vendor_executes_system_violators
-         -vendor_init
-
+  -appdomain
+  -vendor_executes_system_violators
+  -vendor_init
 + -xdns
-
 + -xdnsproxy
 } {
     exec_type
@@ -602,19 +599,15 @@ neverallow { domain -init
    -init
    -installd # for relabelfrom and unlink, check for this in explicit neverallow
    -vold_prepare_subdirs # For unlink
-
 +  -xdns
 with_asan(`-asan_extract')
  } system_data_file:file no_w_file_perms;
 
 
 
-
-
    -vold
    -vold_prepare_subdirs
    -zygote
-
 +  -xdns
 } self:capability dac_override;
  neverallow { domain -traced_probes } self:capability dac_read_search;
@@ -640,8 +633,7 @@ neverallow appdomain drm_data_file:dir_file_class_set
    nfc
    radio
    shared_relro
-
-- system_app
+-  system_app
   } {
   data_file_type
   -dalvikcache_data_file
@@ -698,9 +690,9 @@ wm_trace_data_file))
 
 ```diff 
 
-​	wpantund
-​	wpantund_exec
-​	wpantund_service
+	wpantund
+	wpantund_exec
+	wpantund_service
 
 +	xdns
 +	xdns_exec
