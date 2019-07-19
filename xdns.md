@@ -560,9 +560,18 @@ neverallow { domain -init
 
 
 
+ # Require that domains explicitly label unknown properties, and do not allow
+ # anyone but init to modify unknown properties.
 -neverallow { domain -init -vendor_init } default_prop:property_service set;
 +neverallow { domain -init -vendor_init -system_app -xdns} default_prop:property_service set;
  neverallow { domain -init -vendor_init } mmc_prop:property_service set;
+ 
+ compatible_property_only(`
+-    neverallow { domain -init } default_prop:property_service set;
++    neverallow { domain -init -system_app -xdns } default_prop:property_service set;
+     neverallow { domain -init } mmc_prop:property_service set;
+     neverallow { domain -init -vendor_init } exported_default_prop:property_service set;
+     neverallow { domain -init } exported_secure_prop:property_service set;
 
 
 
