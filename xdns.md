@@ -501,9 +501,9 @@ neverallow { domain -init
 
 ### 3 编写selinux规则te文件
 
-步骤一：将private/xdns.te以及private/xdnsproxy.te放到android源码目录下的/system/sepolicy/private/及/system/sepolicy/prebuilds/api/28.0/private下(两个目录的放同样的文件)；
+步骤一：将private/xdns.te以及private/xdnsproxy.te放到android源码目录下的/system/sepolicy/private/及/system/sepolicy/prebuilds/api/28.0/private/ 下(两个目录的放同样的文件)；
 
-步骤二：将public/xdns.te以及public/xdnsproxy.te放到android源码目录下的/system/sepolicy/public/及/system/sepolicy/prebuilds/api/28.0/private下(两个目录的放同样的文件)；
+步骤二：将public/xdns.te以及public/xdnsproxy.te放到android源码目录下的/system/sepolicy/public/及/system/sepolicy/prebuilds/api/28.0/public/ 下(两个目录的放同样的文件)；
 
 步骤三：将vendor/xdns.te放到android源码目录下的/system/sepolicy/vendor/下；
 
