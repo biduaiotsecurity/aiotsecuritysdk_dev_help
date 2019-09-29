@@ -27,6 +27,12 @@
    ```
 步骤三：命令行行输入"ping xdnsproxy.keepalive.check", 显示如下内容即启动成功。
   ```
+  PING xdnsproxy.keepalive.check (127.1.2.3) 56(84) bytes of data.
+  64 bytes from 127.1.2.3: icmp_seq=1 ttl=64 time=0.375 ms
+  64 bytes from 127.1.2.3: icmp_seq=2 ttl=64 time=0.316 ms
+  64 bytes from 127.1.2.3: icmp_seq=3 ttl=64 time=0.353 ms
+  64 bytes from 127.1.2.3: icmp_seq=4 ttl=64 time=0.345 ms
+  64 bytes from 127.1.2.3: icmp_seq=5 ttl=64 time=0.353 ms
   ```
    
    
