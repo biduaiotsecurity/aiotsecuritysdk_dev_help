@@ -25,8 +25,10 @@
    nameserver 127.0.0.1 # 新增DNS配置项
    nameserver X.X.X.X # 原DNS_1配置项目
    ```
-步骤三：
-   ping xdnsproxy.keepalive.check
+步骤三：命令行行输入"ping xdnsproxy.keepalive.check", 显示如下内容即启动成功。
+  ```
+  ```
+   
    
 ## 停止xdnsproxy
 步骤一：root权限下，命令行输入"xdnsproxy --stop-proxy" 或者找到xdnsproxy 进程 ID， 假设为$PID，执行 kill -9 $PID 命令。
@@ -37,5 +39,5 @@
    ```
    
 # Q&A
-   1、问：启动xdnsproxy返回false？
+   1、问：启动xdnsproxy返回false？  
    答：输入lsof -i:53 查看是否有进程占用53端口，如果有的话，麻烦输入“kill -9 占用进程的PID”。
