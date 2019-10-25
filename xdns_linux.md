@@ -47,3 +47,5 @@
 # Q&A
    1、问：启动xdnsproxy返回false？  
    答：输入lsof -i:53 查看是否有进程占用53端口，如果有的话，麻烦输入“kill -9 占用进程的PID”。
+   2、问：若ping xdnsproxy.keepalive.check 返回无法找到主机？
+   答：不能在限制性网络中进行尝试（需要干净的外网环境）。
