@@ -196,7 +196,34 @@ public class TVSafe {
      * arpfirewall文档：https://github.com/baidutvsafe/baidutvsafe.github.io/blob/master/arpfirewall.md
      */
      public static boolean checkArpFirewall()
-}
+     
+     
+     /**
+     * 开启adb开关防护
+     * 开启后默认为关闭adb
+     * 接口要求：系统权限
+     */
+    public static boolean startAdbSwitchService()
+
+    /**
+     * 关闭adb开关防护
+     * 接口要求：系统权限
+     */
+    public static boolean stopAdbSwitchService() 
+
+    /**
+     * 修改adb开关防护的配置（开启or关闭adb）
+     * 接口要求：系统权限
+     */
+    public static boolean changeAdbSwitch(Boolean on) 
+   
+
+    /**
+     * 查询adb防护与配置状态
+     * @return ADB防护状态， -1 防护未开启， 0，防护开启关闭ADB， 1 防护开启打开ADB
+     */
+    public static int queryAdbSwitch() 
+    
 ```
 
 
