@@ -443,7 +443,7 @@ full_treble_only(`
     -coredomain
     -appdomain # restrictions for vendor apps are declared lower down
     -binder_in_vendor_violators # TODO(b/35870313): Remove once all violations are gone
- +  -arpfirewall
++   -arpfirewall
   } service_manager_type:service_manager find;
 ')
 
@@ -480,7 +480,7 @@ full_treble_only(`
     -coredomain
     -appdomain
     -binder_in_vendor_violators # TODO(b/35870313): Remove once all violations are gone
-+	 -arpfirewall
++   -arpfirewall
   } servicemanager:binder { call transfer };
 ')
 
@@ -490,7 +490,7 @@ full_treble_only(`
     -coredomain
     -netdomain
     -socket_between_core_and_vendor_violators
-+ 	 -arpfirewall
++   -arpfirewall
   }, netd);
 ')
 
@@ -501,7 +501,7 @@ full_treble_only(`
     -data_between_core_and_vendor_violators
     -init
     -vold_prepare_subdirs
-+	 -arpfirewall
++   -arpfirewall
     } {
       data_file_type
       -core_data_file_type
@@ -518,7 +518,7 @@ full_treble_only(`
     -coredomain
     -data_between_core_and_vendor_violators # TODO(b/34980020) Remove once all violators have been cleaned up
     -vendor_init
-+	 -arpfirewall
++   -arpfirewall
   } {
     core_data_file_type
     # libc includes functions like mktime and localtime which attempt to access
@@ -538,7 +538,7 @@ full_treble_only(`
     -appdomain # TODO(b/34980020) remove exemption for appdomain
     -coredomain
     -data_between_core_and_vendor_violators # TODO(b/34980020) Remove once all violators have been cleaned up
-+	 -arpfirewall
++   -arpfirewall
     } {
       system_data_file # default label for files on /data. Covered below
     }:dir ~{ getattr search };
@@ -569,7 +569,7 @@ neverallow {
   -init
   -installd # for relabelfrom and unlink, check for this in explicit neverallow
   -vold_prepare_subdirs # For unlink
-  -arpfirewall
++ -arpfirewall
   with_asan(`-asan_extract')
 } system_data_file:file no_w_file_perms;
 
