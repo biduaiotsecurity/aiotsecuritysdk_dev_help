@@ -10,6 +10,7 @@
         * [android6x版本集成方法](#android6x版本集成方法)
         * [android7x版本集成方法](#android7x版本集成方法)
         * [android8x版本集成方法](#android8x版本集成方法)
+        * [android9x版本集成方法](#android9x版本集成方法)
 * [应用层启动方式](#应用层启动方式)
    * [android启动方式](#android启动方式)
    * [Linux启动方式](#Linux启动方式)
@@ -46,6 +47,7 @@ __备注：arpfirewall以root权限启动。__
     * arpfirewall_Android6.X版本对应Android6.X版本
     * arpfirewall_Android7.X版本对应Android7.X版本
     * arpfirewall_Android8.X版本对应Android8.X版本
+    * arpfirewall_Android9.X版本对应Android9.X版本
 * arpfirewallte文件夹用于集成SELinux模块
 * arpfirewallbin文件夹用于集成init模块
 
@@ -357,6 +359,325 @@ neverallow { domain -init
 ```
 
 步骤八：在源码根目录下，输入指令:"make -j4"进行模块编译，然后将此模块编译进入boot.img/system.img/vendor.img中。
+
+
+### Android9.X版本集成方法
+### 1 编写启动服务
+打开/system/core/rootdir/init.rc文件，在文件末尾加入如下内容：
+```diff
++ service startarpfirewall /system/bin/sh /system/bin/exarpfirewall.sh start
++    class core
++    disabled
++    oneshot
++    seclabel u:r:arpfirewall:s0
+    
++ service stoparpfirewall /system/bin/sh /system/bin/exarpfirewall.sh stop
++    class core
++    disabled
++    oneshot
++    seclabel u:r:arpfirewall:s0
+
++ service checkarpfirewall /system/bin/sh /system/bin/exarpfirewall.sh check
++    class core
++    disabled
++    oneshot
++    seclabel u:r:arpfirewall:s0
+```
+
+### 2 编写selinux规则te文件
+步骤一：将private/arpfirewall.te放到android源码目录下的/system/sepolicy/private/及/system/sepolicy/prebuilds/api/28.0/private/ 下(两个目录的放同样的文件)；
+
+步骤二：将public/arpfirewall.te放到android源码目录下的/system/sepolicy/public/及/system/sepolicy/prebuilds/api/28.0/public/ 下(两个目录的放同样的文件)；
+
+步骤三：打开android源码目录下的/system/sepolicy/private/flie_contexts与/system/sepolicy/prebuilts/api/28.0/private/file_contexts文件（两文件相同)，在文件末尾加入如下内容：
+
+```diff
++ /system/bin/arpfirewall u:object_r:arpfirewall_exec:s0
+```
+
+步骤四：打开android源码目录下的/system/sepolicy/private/domain.te与/system/sepolicy/prebuilts/api/28.0/private/domain.te (两文件相同)，修改如下内容：
+
+```diff
+neverallow {
+  domain
+  -vold
+  -dumpstate
+  userdebug_or_eng(`-incidentd')
+  -storaged
+  -system_server
++ -arpfirewall
+  userdebug_or_eng(`-perfprofd')
+} self:global_capability_class_set sys_ptrace;
+```
+
+步骤五：打开android源码目录下的/system/sepolicy/public/domain.te与/system/sepolicy/prebuilts/api/28.0/public/domain.te (两文件相同)，修改如下内容：
+```diff
+neverallowxperm {domain 
++ -arpfirewall } 
+domain:socket_class_set ioctl { 0 };
+
+neverallowxperm {domain 
++ -arpfirewall } 
+domain:socket_class_set ioctl { SIOCATMARK };
+
+compatible_property_only(`
+    neverallow { domain -init 
++    -system_app} 
+    default_prop:property_service set;
+    neverallow { domain -init } mmc_prop:property_service set;
+    
+    
+full_treble_only(`
+  neverallow {
+    domain
+    -coredomain
+    -appdomain
++   -arpfirewall
+    -binder_in_vendor_violators # TODO(b/35870313): Remove once all violations are gone
+  } binder_device:chr_file rw_file_perms;
+')
+
+full_treble_only(`
+  neverallow {
+    domain
+    -coredomain
+    -appdomain # restrictions for vendor apps are declared lower down
+    -binder_in_vendor_violators # TODO(b/35870313): Remove once all violations are gone
+ +  -arpfirewall
+  } service_manager_type:service_manager find;
+')
+
+full_treble_only(`
+  # Vendor apps are permited to use only stable public services. If they were to use arbitrary
+  # services which can change any time framework/core is updated, breakage is likely.
+  neverallow {
+    appdomain
+    -coredomain
+  } {
+    service_manager_type
+    -app_api_service
+    -ephemeral_app_api_service
+    -audioserver_service # TODO(b/36783122) remove exemptions below once app_api_service is fixed
+    -cameraserver_service
+    -drmserver_service
+    -keystore_service
+    -mediadrmserver_service
+    -mediaextractor_service
+    -mediametrics_service
+    -mediaserver_service
+    -nfc_service
+    -radio_service
+    -virtual_touchpad_service
+    -vr_hwc_service
+    -vr_manager_service
++   -arpfirewall
+  }:service_manager find;
+')
+
+full_treble_only(`
+  neverallow {
+    domain
+    -coredomain
+    -appdomain
+    -binder_in_vendor_violators # TODO(b/35870313): Remove once all violations are gone
++	 -arpfirewall
+  } servicemanager:binder { call transfer };
+')
+
+full_treble_only(`
+  neverallow_establish_socket_comms({
+    domain
+    -coredomain
+    -netdomain
+    -socket_between_core_and_vendor_violators
++ 	 -arpfirewall
+  }, netd);
+')
+
+full_treble_only(`
+  neverallow {
+    coredomain
+    -appdomain # TODO(b/34980020) remove exemption for appdomain
+    -data_between_core_and_vendor_violators
+    -init
+    -vold_prepare_subdirs
++	 -arpfirewall
+    } {
+      data_file_type
+      -core_data_file_type
+      # TODO(b/72998741) Remove exemption. Further restricted in a subsequent
+      # neverallow. Currently only getattr and search are allowed.
+      -vendor_data_file
+    }:dir *;
+
+full_treble_only(`
+  # vendor domains may only access files in /data/vendor, never core_data_file_types
+  neverallow {
+    domain
+    -appdomain # TODO(b/34980020) remove exemption for appdomain
+    -coredomain
+    -data_between_core_and_vendor_violators # TODO(b/34980020) Remove once all violators have been cleaned up
+    -vendor_init
++	 -arpfirewall
+  } {
+    core_data_file_type
+    # libc includes functions like mktime and localtime which attempt to access
+    # files in /data/misc/zoneinfo/tzdata file. These functions are considered
+    # vndk-stable and thus must be allowed for all processes.
+    -zoneinfo_data_file
+  }:file_class_set ~{ append getattr ioctl read write };
+
+neverallow {vendor_init 
++ -arpfirewall} 
+unencrypted_data_file:dir ~search;
+
+full_treble_only(`
+  # vendor domains may only access dirs in /data/vendor, never core_data_file_types
+  neverallow {
+    domain
+    -appdomain # TODO(b/34980020) remove exemption for appdomain
+    -coredomain
+    -data_between_core_and_vendor_violators # TODO(b/34980020) Remove once all violators have been cleaned up
++	 -arpfirewall
+    } {
+      system_data_file # default label for files on /data. Covered below
+    }:dir ~{ getattr search };
+')
+
+full_treble_only(`
+    # Do not allow vendor components to execute files from system
+    # except for the ones whitelist here.
+    neverallow {
+        domain
+        -coredomain
+        -appdomain
+        -vendor_executes_system_violators
+        -vendor_init
++       -arpfirewall
+    } {
+        exec_type
+        -vendor_file_type
+        -crash_dump_exec
+        -netutils_wrapper_exec
+    }:file { entrypoint execute execute_no_trans };
+')
+
+neverallow {
+  domain
+  -system_server
+  -system_app
+  -init
+  -installd # for relabelfrom and unlink, check for this in explicit neverallow
+  -vold_prepare_subdirs # For unlink
+  -arpfirewall
+  with_asan(`-asan_extract')
+} system_data_file:file no_w_file_perms;
+
+neverallow {
+  domain
+  -dnsmasq
+  -dumpstate
+  -init
+  -installd
+  -install_recovery
+  -lmkd
+  -netd
+  -perfprofd
+  -postinstall_dexopt
+  -recovery
+  -sdcardd
+  -tee
+  -ueventd
+  -uncrypt
+  -vendor_init
+  -vold
+  -vold_prepare_subdirs
+  -zygote
++ -arpfirewall
+} self:capability dac_override;
+
+```
+
+步骤六：打开android源码目录下的/system/sepolicy/public/app.te与 /system/sepolicyprebuilts/api/28.0/public/app.te(两文件相同)，修改如下内容：
+```diff
+
+neverallow appdomain drm_data_file:dir_file_class_set
+     { create write setattr relabelfrom relabelto append unlink link rename };
+-neverallow { appdomain -platform_app }
++neverallow { appdomain -platform_app -system_app}
+     apk_data_file:dir_file_class_set
+     { create write setattr relabelfrom relabelto append unlink link rename };
+ neverallow { appdomain -platform_app }
+
+
+
+   nfc
+   radio
+   shared_relro
+-  system_app
+  } {
+  data_file_type
+  -dalvikcache_data_file
+
+```
+
+步骤七：打开android源码目录下的/system/sepolicy/private/system_app.te与/system/sepolicy/prebuilts/api/28.0/private/system_app.te(两文件相同)，修改如下内容：
+
+```diff 
+
+net_domain(system_app)
+ binder_service(system_app)
+
++allow system_app system_app_data_file:file execute;
++allow system_app apk_data_file:dir write;
++allow system_app sysfs_net:file { read getattr open };
++allow system_app apk_data_file:dir { remove_name add_name };
++allow system_app apk_data_file:file { write create unlink };
++allow system_app selinuxfs:file read;
++allow system_app sysfs_net:dir search;
++allow system_app default_prop:property_service set;
+
+```
+
+步骤八：打开android源码目录下的 /system/sepolicy/private/compat/26.0/26.0.ignore.cil和/system/sepolicy/prebuilts/api/28.0/private/compat/26.0/26.0.ignore.cil(两文件相同)，修改如下内容：
+```diff 
+
+	wpantund_exec
+	wpantund_service
+	wpantund_tmpfs
+
++	arpfirewall
++	arpfirewall_exec
++	arpfirewall_tmpfs
+wm_trace_data_file))
+
+```
+
+步骤九：打开android源码目录下的 /system/sepolicy/private/compat/27.0/27.0.ignore.cil和/system/sepolicy/prebuilts/api/28.0/private/compat/27.0/27.0.ignore.cil(两文件相同)，修改如下内容：
+```diff 
+
+	wpantund
+	wpantund_exec
+	wpantund_service
+
++	arpfirewall
++	arpfirewall_exec
++	arpfirewall_tmpfs
+	wpantund_tmpfs))
+
+```
+
+步骤十：打开android源码目录下的/system/sepolicy/tests/treble_sepolicy_tests.py，修改如下内容：
+```diff 
+def TestCoredomainViolations():
+    global alldomains
+    # verify that all domains launched from /system have the coredomain
+    # attribute
+    ret = ""
++   return ret   
+```
+
+步骤十一：在源码根目录下，输入指令:"m"进行编译得到所有相关文件。
 
 # 应用层启动方式
 ## android启动方式
