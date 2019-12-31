@@ -89,7 +89,7 @@ public class TVSafe {
     public static boolean fullScanVirus(boolean sysApp) 
 
     /**
-     * 静默启动病毒扫描模块，扫描指定文件
+     * 静默启动病毒扫描模块，扫描指定文件,不支持U盘等外界设备路径
      * 样本下载：链接: https://pan.baidu.com/s/1NN_Afvji_BVfmSBRhh1wHQ 密码: fuy9
      *
      * @param filePath 文件绝对路径
@@ -98,7 +98,7 @@ public class TVSafe {
     public static boolean scanApkFile(String filePath)
     
     /**
-     * 静默启动病毒扫描模块，扫描指定文件列表
+     * 静默启动病毒扫描模块，扫描指定文件列表，不支持U盘等外界设备路径
      * 样本下载：链接: https://pan.baidu.com/s/1NN_Afvji_BVfmSBRhh1wHQ 密码: fuy9
      * 
      * @param files 欲扫描的文件List(绝对路径)
@@ -107,7 +107,7 @@ public class TVSafe {
     public static boolean scanApkFiles(List<String> files)
 
     /**
-     * 静默启动病毒扫描模块， 扫描指定路径
+     * 静默启动病毒扫描模块， 扫描指定路径，不支持U盘等外界设备路径
      * 样本下载：链接: https://pan.baidu.com/s/1NN_Afvji_BVfmSBRhh1wHQ 密码: fuy9
      * 
      * @param dir 文件夹路径
