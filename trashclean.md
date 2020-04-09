@@ -14,12 +14,11 @@ repositories {
 dependencies {
     compile(name: 'tvsafe-release-vxxx', ext: 'aar')
    
-
-	// 如果项目中已集成过gson，可以忽略
-    compile 'com.google.code.gson:gson:2.8.0'
-    
-    // 最少得集成一个v4包，如果已经集成过v4包，可以忽略
-    compile 'com.android.support:support-v4:25.1.1'
+    implementation  'com.squareup.okhttp3:okhttp:3.12.0'
+    // 如果项目中已集成过gson，可以忽略
+    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'org.greenrobot:eventbus:3.0.0'
 }
 ```
 
