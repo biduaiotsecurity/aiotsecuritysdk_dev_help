@@ -19,6 +19,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'org.greenrobot:eventbus:3.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
 }
 ```
 
