@@ -1,14 +1,14 @@
-# IoT hub SDK接入文档
+# IoT Core SDK Android(Security) 接入文档
 ## 前置条件
 1、请先注册 登录百度云
 
-2、进入物接入IoT Hub https://cloud.baidu.com/product/iot.html
+2、进入物接入IoT Core https://cloud.baidu.com/product/iot.html
 
 3、创建项目
 
 4、设置策略、身份、用户等信息
 
-## IoT hub SDK 接入方法
+## IoT Core SDK Android(Security) 接入方法
 
 ```
 /**
