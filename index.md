@@ -1,4 +1,4 @@
-# 电视安全Sdk接入文档 
+# AIoTSecurity Sdk接入文档 
 
  [TOC] 
 
@@ -12,11 +12,12 @@ repositories {
 }
 
 dependencies {
-    compile(name: 'tvsafe-release-vxxx', ext: 'aar')
+    implementation(name: 'iotsecurity-release-vxxx', ext: 'aar')
    
-
-	// 如果项目中已集成过gson，可以忽略
-    compile 'com.google.code.gson:gson:2.8.0'
+    // 如果项目中已集成过gson，可以忽略
+    implementation 'com.google.code.gson:gson:2.8.0'
+    // 如果项目中已集成过eventbus，可以忽略
+    implementation 'org.greenrobot:eventbus:3.0.0'
     
     // 最少得集成一个v4包，如果已经集成过v4包，可以忽略
     compile 'com.android.support:support-v4:25.1.1'
@@ -27,7 +28,7 @@ dependencies {
 SDK已经做好混淆规则。
 
 ## te规则
-如果是系统app集成，则需要加一条te规则。
+如果是系统app集成，则需要加一条te规则
 allow system_app system_app_data_file:file execute
 如果关闭了selinux可以忽略。
 
@@ -44,15 +45,16 @@ allow system_app system_app_data_file:file execute
 		// 必须在super之后
 		// 参数1 ： ctx
 		// 参数2 ： 回调服务所在的包名,就是最终app的包名。
-		// 参数3 ： 回调服务名
-        TVSafe.onApplicationCreate(getApplicationContext(), getApplicationContext().getPackageName(),
+		// 参数3 ： 回调服务名, 这个需要自定义，下面的《回调》小节会提到
+        IoTSecurity.onApplicationCreate(this, getApplicationContext().getPackageName(),
                 MyResultService.class.getName());
     }
 
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-	TVSafe.attachBaseContext(this);
+	MultiDex.install(base);	 //如果需要multidex，加上这个
+	IoTSecurity.attachBaseContext(this);
     }
 ```
 
@@ -61,7 +63,7 @@ allow system_app system_app_data_file:file execute
 ### 调用方法。
 这些方法都是静态的，你可以直接访问它们。如果接口返回失败，多数情况下是还没有加载好模块，稍等一会再尝试调用。
 ```
-public class TVSafe {
+public class IoTSecurity {
     /**
      * 扫描漏洞
      *
