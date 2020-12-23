@@ -34,7 +34,7 @@ __备注：arpfirewall以root权限启动。__
 
 # 支持环境
 当前可以支持的环境：
-* Android环境 [4.4 - 8.0]
+* Android环境 [4.4 - 9.0]
 由于android4.3及以下版本由于内核SELinux模块缺失而不在此文档内容当中，需要适配android版本请联系我们。
 
 * Linux环境
