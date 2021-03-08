@@ -10,6 +10,25 @@
 
 ## IoT Core SDK Android(Security) 接入方法
 
+### 集成
+
+```
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    implementation(name: 'iotcore_tiny-release-vxxx', ext: 'aar')
+    implementation  'com.squareup.okhttp3:okhttp:3.12.0'
+    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'org.greenrobot:eventbus:3.0.0'
+    implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.0'
+}
+```
+
 ### SDK初始化
 在Application中接入
 ```
