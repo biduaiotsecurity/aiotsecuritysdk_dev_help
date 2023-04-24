@@ -1051,13 +1051,13 @@ neverallow {
 }:file no_x_file_perms;
 ```
 
-步骤十一：打开android源码目录下的/system/sepolicy/private/property.te与/system/sepolicy/prebuilts/api/33.0/private/property.te(两文件相同)，修改如下内容：
+步骤十二：打开android源码目录下的/system/sepolicy/private/property.te与/system/sepolicy/prebuilts/api/33.0/private/property.te(两文件相同)，修改如下内容：
 ```diff 
 system/sepolicy/private/property.te
 neverallow {
   domain
   -init
-  -system_app
++ -system_app
 } default_prop:property_service set;
 
 neverallow {
@@ -1079,14 +1079,16 @@ neverallow {
     -radio_prop
   }:file no_rw_file_perms;
 
-neverallow { coredomain -init -dumpstate + -arpfirewall} {
+- neverallow { coredomain -init -dumpstate } {
++ neverallow { coredomain -init -dumpstate -arpfirewall} {
   vendor_property_type
   vendor_internal_property_type
   -vendor_restricted_property_type
   -vendor_public_property_type
 }:file no_rw_file_perms;
 
-neverallow { domain -coredomain + -arpfirewall} {
+- neverallow { domain -coredomain } {
++ neverallow { domain -coredomain -arpfirewall} {
   system_property_type
   system_internal_property_type
   -system_restricted_property_type
@@ -1095,15 +1097,18 @@ neverallow { domain -coredomain + -arpfirewall} {
 
 ```
 
-步骤十二：打开android源码目录下的/system/sepolicy/microdroid/system/public/te_macros与/system/sepolicy/prebuilts/api/33.0/public/te_macros(两文件相同)，修改如下内容：
+步骤十三：打开android源码目录下的/system/sepolicy/microdroid/system/public/te_macros与/system/sepolicy/prebuilts/api/33.0/public/te_macros(两文件相同)，修改如下内容：
 ```diff 
 define(`system_internal_prop', `
   define_prop($1, system, internal)
   treble_sysprop_neverallow(`
-    neverallow { domain -coredomain + -arpfirewall} $1:file no_rw_file_perms;
+-    neverallow { domain -coredomain } $1:file no_rw_file_perms;
++    neverallow { domain -coredomain -arpfirewall} $1:file no_rw_file_perms;
   ')
 ')
 ```
+
+步骤十四：在源码根目录下，输入指令:"m"进行编译得到所有相关文件。
 
 # 应用层启动方式
 ## android启动方式
