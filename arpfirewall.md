@@ -733,14 +733,17 @@ neverallow {
 } self:global_capability_class_set sys_ptrace;
 
 
-neverallow ~{dac_override_allowed + arpfirewall} self:global_capability_class_set dac_override;
+- neverallow ~{dac_override_allowed} self:global_capability_class_set dac_override;
++ neverallow ~{dac_override_allowed arpfirewall} self:global_capability_class_set dac_override;
 ```
 
 步骤五：打开android源码目录下的/system/sepolicy/public/domain.te与/system/sepolicy/prebuilts/api/33.0/public/domain.te (两文件相同)，修改如下内容：
 ```diff
-neverallowxperm { + -arpfirewall } *:{ dir notdevfile_class_set socket_class_set blk_file} ioctl { 0 };
+- neverallowxperm *:{ dir notdevfile_class_set socket_class_set blk_file} ioctl { 0 };
++ neverallowxperm { -arpfirewall } *:{ dir notdevfile_class_set socket_class_set blk_file} ioctl { 0 };
 
-neverallowxperm { domain + -arpfirewall } domain:socket_class_set ioctl { SIOCATMARK };
+- neverallowxperm { domain } domain:socket_class_set ioctl { SIOCATMARK };
++ neverallowxperm { domain -arpfirewall } domain:socket_class_set ioctl { SIOCATMARK };
 
 full_treble_only(`
   # Vendor apps are permited to use only stable public services. If they were to use arbitrary
