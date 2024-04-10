@@ -1538,7 +1538,7 @@ neverallow {
 ```diff
 define(`system_internal_prop', `
   define_prop($1, system, internal)
-  treble_sys                                                prop_neverallow(`
+  treble_sysprop_neverallow(`
 -    neverallow { domain -coredomain } $1:file no_rw_file_perms;
 +    neverallow { domain -coredomain -arpfirewall} $1:file no_rw_file_perms;
   ')
