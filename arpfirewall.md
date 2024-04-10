@@ -12,6 +12,7 @@
         * [android8x版本集成方法](#android8x版本集成方法)
         * [android9x版本集成方法](#android9x版本集成方法)
         * [android13x版本集成方法](#android13x版本集成方法)
+        * [android14x版本集成方法](#android14x版本集成方法)
 * [应用层启动方式](#应用层启动方式)
    * [android启动方式](#android启动方式)
    * [Linux启动方式](#Linux启动方式)
@@ -1112,6 +1113,55 @@ define(`system_internal_prop', `
 ```
 
 步骤十四：在源码根目录下，输入指令:"m"进行编译得到所有相关文件。
+
+### Android14.X版本集成方法
+### 1 编写启动服务
+打开/system/core/rootdir/init.rc文件，在文件末尾加入如下内容：
+```diff
++ service startarpfirewall /system/bin/sh /system/bin/exarpfirewall.sh start
++    class core
++    disabled
++    oneshot
++    seclabel u:r:arpfirewall:s0
+    
++ service stoparpfirewall /system/bin/sh /system/bin/exarpfirewall.sh stop
++    class core
++    disabled
++    oneshot
++    seclabel u:r:arpfirewall:s0
+
++ service checkarpfirewall /system/bin/sh /system/bin/exarpfirewall.sh check
++    class core
++    disabled
++    oneshot
++    seclabel u:r:arpfirewall:s0
+```
+
+### 2 编写selinux规则te文件
+步骤一：将private/arpfirewall.te放到android源码目录下的/system/sepolicy/private/及/system/sepolicy/prebuilts/api/34.0/private/ 下(两个目录的放同样的文件);
+步骤二：将public/arpfirewall.te放到android源码目录下的/system/sepolicy/public/及/system/sepolicy/prebuilds/api/34.0/public/ 下(两个目录的放同样的文件);
+步骤三：打开android源码目录下的/system/sepolicy/private/flie_contexts与/system/sepolicy/prebuilts/api/34.0/private/file_contexts文件（两文件相同)，在文件末尾加入如下内容:
+```diff
++ /system/bin/arpfirewall u:object_r:arpfirewall_exec:s0
+```
+步骤四：打开android源码目录下的/system/sepolicy/private/domain.te与/system/sepolicy/prebuilts/api/34.0/private/domain.te (两文件相同)，修改如下内容:
+```diff
+neverallow {
+  domain
+  -vold
+  userdebug_or_eng(`-llkd')
+  -dumpstate
++ -arpfirewall
+  userdebug_or_eng(`-incidentd')
+  userdebug_or_eng(`-profcollectd')
+  userdebug_or_eng(`-simpleperf_boot')
+  -storaged
+  -system_server
+} self:global_capability_class_set sys_ptrace;
+
+- neverallow ~dac_override_allowed self:global_capability_class_set dac_override;
++ neverallow ~{dac_override_allowed arpfirewall} self:global_capability_class_set dac_override;
+```
 
 # 应用层启动方式
 ## android启动方式
