@@ -1139,7 +1139,9 @@ define(`system_internal_prop', `
 
 ### 2 编写selinux规则te文件
 步骤一：将private/arpfirewall.te放到android源码目录下的/system/sepolicy/private/及/system/sepolicy/prebuilts/api/34.0/private/ 下(两个目录的放同样的文件);
+
 步骤二：将public/arpfirewall.te放到android源码目录下的/system/sepolicy/public/及/system/sepolicy/prebuilds/api/34.0/public/ 下(两个目录的放同样的文件);
+
 步骤三：打开android源码目录下的/system/sepolicy/private/flie_contexts与/system/sepolicy/prebuilts/api/34.0/private/file_contexts文件（两文件相同)，在文件末尾加入如下内容:
 ```diff
 + /system/bin/arpfirewall u:object_r:arpfirewall_exec:s0
@@ -1292,7 +1294,7 @@ full_treble_only(`
     -appdomain # TODO(b/34980020) remove exemption for appdomain
     -coredomain
     -data_between_core_and_vendor_violators # TODO(b/34980020) Remove once all violators have been cleaned up
-    -arpfirewall
++   -arpfirewall
     } {
       system_data_file # default label for files on /data. Covered below
     }:dir ~{ getattr search };
@@ -1403,7 +1405,8 @@ neverallow {
 ```diff
 neverallow appdomain drm_data_file:dir_file_class_set
     { create write setattr relabelfrom relabelto append unlink link rename };
-neverallow { appdomain -platform_app -system_app}
+-neverallow { appdomain -platform_app }
++neverallow { appdomain -platform_app -system_app}
     apk_data_file:dir_file_class_set
     { create write setattr relabelfrom relabelto append unlink link rename };
 neverallow { appdomain -platform_app }
